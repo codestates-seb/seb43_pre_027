@@ -35,6 +35,16 @@ const FormGroup = styled.div`
   }
 
   div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+
+    svg {
+      position: absolute;
+      right: 8px;
+    }
+
     input {
       width: 100%;
       padding: 9px 8px;
@@ -42,9 +52,33 @@ const FormGroup = styled.div`
       border-radius: 3px;
 
       &:focus {
-        border: 1px solid #59a4de;
+        border-color: #59a4de;
         outline: 4px solid #59a4de3f;
       }
+    }
+  }
+
+  p {
+    font-size: 12px;
+  }
+
+  svg,
+  p {
+    display: none;
+  }
+
+  // alert-on class
+  .alert-on {
+    display: flex;
+    color: #de4f54;
+  }
+
+  input.alert-on {
+    border-color: #de4f54;
+
+    &:focus {
+      border-color: #de4f54;
+      outline: 4px solid #de4f543c;
     }
   }
 `;
@@ -77,10 +111,11 @@ function Login() {
                 size="30"
                 maxLength="100"
                 name="email"
+                className="alert-on"
               />
-              {/* <Alert /> */}
+              <Alert className="alert-on" />
             </div>
-            {/* <p>Email cannot be empty.</p> */}
+            <p className="alert-on">Email cannot be empty.</p>
           </FormGroup>
           <FormGroup>
             <label htmlFor="password">Password</label>
@@ -90,10 +125,11 @@ function Login() {
                 id="password"
                 autoComplete="off"
                 name="password"
+                className="alert-on"
               />
-              {/* <Alert /> */}
-              {/* <p>Password cannot be empty.</p> */}
+              <Alert className="alert-on" />
             </div>
+            <p className="alert-on">Password cannot be empty.</p>
           </FormGroup>
           <LoginBtn type="submit">Log in</LoginBtn>
         </form>
