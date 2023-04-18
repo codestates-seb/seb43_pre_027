@@ -41,11 +41,6 @@ const FormGroup = styled.div`
     margin-bottom: 8px;
     position: relative;
 
-    svg {
-      position: absolute;
-      right: 8px;
-    }
-
     input {
       width: 100%;
       padding: 9px 8px;
@@ -57,15 +52,20 @@ const FormGroup = styled.div`
         outline: 4px solid #59a4de3f;
       }
     }
-  }
 
-  p {
-    font-size: 12px;
+    svg {
+      position: absolute;
+      right: 8px;
+    }
   }
 
   svg,
   p {
     display: none;
+  }
+
+  p {
+    font-size: 12px;
   }
 
   &.email.alert-on,
@@ -97,6 +97,7 @@ const LoginBtn = styled.button`
   border-radius: 3px;
   color: #ffffff;
   background-color: #0a95ff;
+  cursor: pointer;
 `;
 
 const SignUp = styled.p`
@@ -129,13 +130,7 @@ function Login() {
           <FormGroup className={emailAlert}>
             <label htmlFor="email">Email</label>
             <div>
-              <input
-                type="text"
-                id="email"
-                size="30"
-                maxLength="100"
-                name="email"
-              />
+              <input type="email" size="30" maxLength="100" name="email" />
               <Alert />
             </div>
             <p>Email cannot be empty.</p>
@@ -143,12 +138,7 @@ function Login() {
           <FormGroup className={passwordAlert}>
             <label htmlFor="password">Password</label>
             <div>
-              <input
-                type="password"
-                id="password"
-                autoComplete="off"
-                name="password"
-              />
+              <input type="password" autoComplete="off" name="password" />
               <Alert />
             </div>
             <p>Password cannot be empty.</p>
