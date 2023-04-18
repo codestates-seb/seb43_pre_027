@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { reset } from 'styled-reset';
-import QuestionList from './Pages/QuestionList';
+import Questions from './Pages/Questions';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -16,7 +16,7 @@ function App() {
   return (
     <div>
       <GlobalStyles />
-      <QuestionList />
+      <Questions />
     </div>
   );
 }
