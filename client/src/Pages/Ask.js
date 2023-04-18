@@ -1,7 +1,9 @@
+import AskQuestion from '../Components/AskQuestion';
+
 function Ask() {
   return (
     <div>
-      <div>ask</div>
+      <AskQuestion></AskQuestion>
     </div>
   );
 }
