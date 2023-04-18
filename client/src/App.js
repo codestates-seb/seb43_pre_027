@@ -3,9 +3,12 @@ import { reset } from 'styled-reset';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
-    body {
-        background-color: white;
-    }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+      background-color: white;
+  }
 `;
 
 function App() {
