@@ -1,7 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import { reset } from 'styled-reset';
-// import Ask from './Pages/Ask';
+import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
+import { Routes, Route, Link } from 'react-router-dom';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -17,8 +18,10 @@ function App() {
   return (
     <div>
       <GlobalStyles />
-      <Questions />
-      {/* <Ask /> */}
+      <Routes>
+        <Route path="/" element={<Questions />} />
+        <Route path="/ask" element={<Ask />} />
+      </Routes>
     </div>
   );
 }

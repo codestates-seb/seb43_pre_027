@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addQuestion } from './../store.js';
+import { useNavigate } from 'react-router-dom';
 
 function AskQuestion() {
   const dispatch = useDispatch();
-
+  let navigate = useNavigate();
   // 값 만들때마다 새로운 id로 만들어지게하고
 
   const [타이틀내용, set타이틀내용] = useState('');
@@ -77,19 +78,11 @@ function AskQuestion() {
           dispatch(addQuestion(새로운질문));
           set타이틀내용('');
           set바디내용('');
+          navigate('/');
         }}
       >
         Post your question
       </Title버튼>
-      {임시질문자료.map(function (data, index) {
-        return (
-          <ul key={index}>
-            <li>{data.title}</li>
-            <li>{data.body}</li>
-            <li>{data.userName}</li>
-          </ul>
-        );
-      })}
     </Container>
   );
 }

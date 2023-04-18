@@ -1,17 +1,36 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function AllQuestions() {
-  // let 임시질문자료 = useSelector((state) => {
-  //   return state.임시질문자료;
-  // });
+  let navigate = useNavigate();
+
+  let 임시질문자료 = useSelector((state) => {
+    return state.임시질문자료;
+  });
 
   return (
     <Mainbar>
       <제목버튼묶음>
         <제목글자>All Questions</제목글자>
-        <버튼>Ask Question</버튼>
+        <버튼
+          onClick={() => {
+            navigate('/ask');
+          }}
+        >
+          Ask Question
+        </버튼>
       </제목버튼묶음>
+      <질문갯수>{임시질문자료.length} questions</질문갯수>
+      {임시질문자료.map(function (data, index) {
+        return (
+          <질문Ul key={index}>
+            <질문제목>{data.title}</질문제목>
+            <질문바디>{data.body}</질문바디>
+            <유저네임>{data.userName}</유저네임>
+          </질문Ul>
+        );
+      })}
     </Mainbar>
   );
 }
@@ -33,6 +52,7 @@ let 제목버튼묶음 = styled.div`
   justify-content: space-between;
   height: 49.78px;
   align-items: center;
+  margin-bottom: 12px;
 `;
 
 let 제목글자 = styled.div`
@@ -52,4 +72,43 @@ let 버튼 = styled.button`
   justify-content: center;
   align-items: center;
   color: #fff;
+`;
+
+let 질문갯수 = styled.div`
+  font-size: 17px;
+  font-weight: 600 !important;
+  padding-bottom: 12px;
+  border-bottom: 1px solid gray;
+`;
+
+let 질문Ul = styled.ul`
+  height: 126.078px;
+  padding: 16px;
+  // 질문사이에 선넣기
+  border-bottom: 1px solid #e3e6e8;
+`;
+
+let 질문제목 = styled.h3`
+  color: #0274cc;
+  font-size: 17px;
+  padding-right: 24px;
+  margin-bottom: 5px;
+`;
+
+let 질문바디 = styled.h3`
+  font-size: 13px;
+  // 3줄 넘으면 생략 시키는 css
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 5px;
+`;
+
+let 유저네임 = styled.div`
+  height: 38.59px;
+  //수직정렬
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
 `;
