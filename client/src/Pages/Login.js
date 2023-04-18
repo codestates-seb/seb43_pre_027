@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 import { ReactComponent as Alert } from '../Assets/alert.svg';
@@ -97,6 +98,9 @@ const SignUp = styled.p`
 `;
 
 function Login() {
+  const [alert, setAlert] = useState(false);
+  const alertOn = alert ? 'alert-on' : '';
+
   return (
     <Background>
       <Logo className="logo" />
@@ -111,11 +115,11 @@ function Login() {
                 size="30"
                 maxLength="100"
                 name="email"
-                className="alert-on"
+                className={alertOn}
               />
-              <Alert className="alert-on" />
+              <Alert className={alertOn} />
             </div>
-            <p className="alert-on">Email cannot be empty.</p>
+            <p className={alertOn}>Email cannot be empty.</p>
           </FormGroup>
           <FormGroup>
             <label htmlFor="password">Password</label>
@@ -125,11 +129,11 @@ function Login() {
                 id="password"
                 autoComplete="off"
                 name="password"
-                className="alert-on"
+                className={alertOn}
               />
-              <Alert className="alert-on" />
+              <Alert className={alertOn} />
             </div>
-            <p className="alert-on">Password cannot be empty.</p>
+            <p className={alertOn}>Password cannot be empty.</p>
           </FormGroup>
           <LoginBtn type="submit">Log in</LoginBtn>
         </form>
