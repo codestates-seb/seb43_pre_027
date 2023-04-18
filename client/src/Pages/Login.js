@@ -68,18 +68,24 @@ const FormGroup = styled.div`
     display: none;
   }
 
-  // alert-on class
-  .alert-on {
-    display: flex;
-    color: #de4f54;
-  }
+  &.email.alert-on,
+  &.password.alert-on {
+    input {
+      border-color: #de4f54;
+    }
 
-  input.alert-on {
-    border-color: #de4f54;
-
-    &:focus {
+    input:focus {
       border-color: #de4f54;
       outline: 4px solid #de4f543c;
+    }
+
+    svg,
+    p {
+      display: flex;
+    }
+
+    p {
+      color: #de4f54;
     }
   }
 `;
@@ -98,15 +104,29 @@ const SignUp = styled.p`
 `;
 
 function Login() {
-  const [alert, setAlert] = useState(false);
-  const alertOn = alert ? 'alert-on' : '';
+  const [emailAlert, setEmailAlert] = useState('');
+  const [passwordAlert, setPasswordAlert] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
+
+    setEmailAlert(email === '' ? 'email alert-on' : '');
+    setPasswordAlert(password === '' ? 'password alert-on' : '');
+  };
 
   return (
     <Background>
       <Logo className="logo" />
       <Container>
-        <form>
-          <FormGroup>
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
+          <FormGroup className={emailAlert}>
             <label htmlFor="email">Email</label>
             <div>
               <input
@@ -115,13 +135,12 @@ function Login() {
                 size="30"
                 maxLength="100"
                 name="email"
-                className={alertOn}
               />
-              <Alert className={alertOn} />
+              <Alert />
             </div>
-            <p className={alertOn}>Email cannot be empty.</p>
+            <p>Email cannot be empty.</p>
           </FormGroup>
-          <FormGroup>
+          <FormGroup className={passwordAlert}>
             <label htmlFor="password">Password</label>
             <div>
               <input
@@ -129,11 +148,10 @@ function Login() {
                 id="password"
                 autoComplete="off"
                 name="password"
-                className={alertOn}
               />
-              <Alert className={alertOn} />
+              <Alert />
             </div>
-            <p className={alertOn}>Password cannot be empty.</p>
+            <p>Password cannot be empty.</p>
           </FormGroup>
           <LoginBtn type="submit">Log in</LoginBtn>
         </form>
