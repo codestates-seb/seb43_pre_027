@@ -22,6 +22,11 @@ let 임시질문자료 = createSlice({
       userName: '정유주',
     },
   ],
+  reducers: {
+    addQuestion: (state, action) => {
+      return [...state, action.payload];
+    },
+  },
 });
 
 export default configureStore({
@@ -29,3 +34,5 @@ export default configureStore({
     임시질문자료: 임시질문자료.reducer,
   },
 });
+
+export let { addQuestion } = 임시질문자료.actions;

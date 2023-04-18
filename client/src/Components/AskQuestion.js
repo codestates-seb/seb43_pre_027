@@ -1,6 +1,27 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { addQuestion } from './../store.js';
 
 function AskQuestion() {
+  const dispatch = useDispatch();
+
+  // 값 만들때마다 새로운 id로 만들어지게하고
+
+  const [타이틀내용, set타이틀내용] = useState('');
+  const [바디내용, set바디내용] = useState('');
+
+  let 임시질문자료 = useSelector((state) => {
+    return state.임시질문자료;
+  });
+
+  let 새로운질문 = {
+    id: 3,
+    title: 타이틀내용,
+    body: 바디내용,
+    userName: '김제발',
+  };
+
   return (
     <Container>
       <제목>
@@ -30,7 +51,13 @@ function AskQuestion() {
         <div>
           Be specific and imagine you’re asking a question to another person.
         </div>
-        <Title입력 placeholder="e.g Is there an R function for finding the index of an element in a vector?"></Title입력>
+        <Title입력
+          placeholder="e.g Is there an R function for finding the index of an element in a vector?"
+          value={타이틀내용}
+          onChange={(e) => {
+            set타이틀내용(e.target.value);
+          }}
+        ></Title입력>
       </TitleBox>
       <TitleBox>
         <Title제목>What are the details of your problem?</Title제목>
@@ -38,9 +65,31 @@ function AskQuestion() {
           Describe what you tried, what you expected to happen, and what
           actually resulted. Minimum 20 characters.
         </div>
-        <Body입력></Body입력>
+        <Body입력
+          value={바디내용}
+          onChange={(e) => {
+            set바디내용(e.target.value);
+          }}
+        ></Body입력>
       </TitleBox>
-      <Title버튼>Post your question</Title버튼>
+      <Title버튼
+        onClick={() => {
+          dispatch(addQuestion(새로운질문));
+          set타이틀내용('');
+          set바디내용('');
+        }}
+      >
+        Post your question
+      </Title버튼>
+      {임시질문자료.map(function (data, index) {
+        return (
+          <ul key={index}>
+            <li>{data.title}</li>
+            <li>{data.body}</li>
+            <li>{data.userName}</li>
+          </ul>
+        );
+      })}
     </Container>
   );
 }
@@ -67,10 +116,9 @@ let 제목글자 = styled.div`
 
 let 설명 = styled.div`
   background-color: #ebf4fb;
-  border: 1px;
+  border: 1px solid blue;
   padding: 24px;
   margin-bottom: 25px;
-  border: 1px solid blue;
   border-radius: 5px;
 `;
 
@@ -97,9 +145,8 @@ let Ul = styled.ul`
 `;
 
 let TitleBox = styled.div`
-  border: 1px;
-  padding: 24px;
   border: 1px solid black;
+  padding: 24px;
   border-radius: 5px;
   margin-bottom: 25px;
 `;
@@ -111,7 +158,7 @@ let Title제목 = styled.div`
 
 let Title입력 = styled.input`
   width: 100%;
-  border: 1px;
+  border: 1px solid black;
   padding: 7.8px 9.1px;
   border: 1px solid black;
   border-radius: 5px;

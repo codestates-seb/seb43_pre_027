@@ -1,83 +1,55 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-function AllQuestion() {
-  let 임시질문자료 = useSelector((state) => {
-    return state.임시질문자료;
-  });
+function AllQuestions() {
+  // let 임시질문자료 = useSelector((state) => {
+  //   return state.임시질문자료;
+  // });
 
   return (
-    <div>
-      <콘테이너>
-        <콘텐츠>
-          <메인>
-            <질문들과버튼>
-              <div>All Question</div>
-              <버튼>Ask Question</버튼>
-            </질문들과버튼>
-            <질문갯수>{임시질문자료.length} questions</질문갯수>
-            {/* redux와 map을 이용해서 질문리스트를 뽑ㄴ */}
-            {임시질문자료.map(function (data, index) {
-              return (
-                <ul key={index}>
-                  <li>{data.title}</li>
-                  <li>{data.body}</li>
-                  <li>{data.userName}</li>
-                </ul>
-              );
-            })}
-          </메인>
-        </콘텐츠>
-      </콘테이너>
-    </div>
+    <Mainbar>
+      <제목버튼묶음>
+        <제목글자>All Questions</제목글자>
+        <버튼>Ask Question</버튼>
+      </제목버튼묶음>
+    </Mainbar>
   );
 }
 
-export default AllQuestion;
+export default AllQuestions;
 
-let 질문들과버튼 = styled.div`
-  margin-bottom: 12px;
-  height: 37.781px;
-  background-color: green;
+let Mainbar = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 727px;
+  height: 100%;
+  border-left: 1px;
+  padding: 24px 16px;
+`;
 
+let 제목버튼묶음 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  height: 49.78px;
+  align-items: center;
 `;
 
-let 콘테이너 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 1264px;
-`;
-
-let 콘텐츠 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 1100px;
-`;
-
-let 메인 = styled.div`
-  width: 727px;
+let 제목글자 = styled.div`
+  font-size: 27px;
+  font-weight: 600 !important;
+  padding-top: 24px;
+  padding-bottom: 27px;
 `;
 
 let 버튼 = styled.button`
-  width:80.216px
-  height: 14.981px;
-  padding: 10.4px
-  margin-bottom: 12px;
-  font-size: 17px;
-  border: transparent;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-  background: #0274cc;
-  color: white;
-  border-radius: 4px;
-`;
-
-let 질문갯수 = styled.div`
-  height: 35.031px;
-  background-color: blue;
-  aligth
+  background-color: #0274cc;
+  border-radius: 5px;
+  padding: 0.8em 1.2em 0.8em 1em;
+  transition: all ease-in-out 0.2s;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
 `;

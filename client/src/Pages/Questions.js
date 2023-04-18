@@ -1,9 +1,9 @@
-import AllQuestion from '../Components/AllQuestion';
+import AllQuestions from '../Components/AllQuestion';
 
 function Questions() {
   return (
     <div>
-      <AllQuestion></AllQuestion>
+      <AllQuestions></AllQuestions>
     </div>
   );
 }
