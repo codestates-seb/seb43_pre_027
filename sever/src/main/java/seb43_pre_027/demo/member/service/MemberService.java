@@ -57,6 +57,12 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+    public void deleteMember(Long memberId) {
+        Member verifiedMember = findVerifiedMember(memberId);
+        verifiedMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
+        memberRepository.save(verifiedMember);
+    }
+
     @Transactional(readOnly = true)
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =

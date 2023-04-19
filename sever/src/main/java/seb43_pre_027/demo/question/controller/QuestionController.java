@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import seb43_pre_027.demo.comment.dto.CommentPostDto;
+import seb43_pre_027.demo.comment.entity.Comment;
+import seb43_pre_027.demo.comment.mapper.CommentMapper;
+import seb43_pre_027.demo.comment.service.CommentService;
 import seb43_pre_027.demo.dto.MultiResponseDto;
 import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
@@ -23,21 +27,20 @@ import java.util.List;
 @Validated
 @Slf4j
 public class QuestionController {
-    private final static String QUESTION_DEFAULT_URL = "/questions";
+    public final static String QUESTION_DEFAULT_URL = "/questions";
     private final QuestionService questionService;
-    private final QuestionMapper mapper;
+    private final QuestionMapper questionMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
-    public QuestionController(QuestionService questionService, QuestionMapper mapper) {
+    public QuestionController(QuestionService questionService,
+                              QuestionMapper questionMapper,
+                              CommentService commentService,
+                              CommentMapper commentMapper) {
         this.questionService = questionService;
-        this.mapper = mapper;
-    }
-
-    @PostMapping  //질문 게시글 생성, 생성하는 메서드를 만들 수 있지만 그래서 서비스 해주는 클래스를 만듦 , 질문객체
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionDto.Post questionPostDto) {
-        Question question = questionService.createQuestion(mapper.questionPostDtoToQuestion(questionPostDto));
-        URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, question.getQuestionId());
-
-        return ResponseEntity.created(location).build();
+        this.questionMapper = questionMapper;
+        this.commentService = commentService;
+        this.commentMapper = commentMapper;
     }
 
     @PatchMapping("/{question-id}")
@@ -47,16 +50,16 @@ public class QuestionController {
         requestBody.setQuestionId(questionId);
 
         Question question =
-                questionService.updateQuestion(mapper.questionPatchDtoToQuestion(requestBody));
+                questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody));
 
-        return new ResponseEntity<>(mapper.questionToQuestionResponseDto(question), HttpStatus.OK);
+        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(
             @PathVariable("question-id") @Positive long questionId) {
         Question question = questionService.findQuestion(questionId);
-        return new ResponseEntity<>(mapper.questionToQuestionWithCommentResponseDto(question), HttpStatus.OK);
+        return new ResponseEntity<>(questionMapper.questionToQuestionWithCommentResponseDto(question), HttpStatus.OK);
     }
 
     @GetMapping("/all-questions")
@@ -65,7 +68,7 @@ public class QuestionController {
         Page<Question> pageQuestions = questionService.findQuestions(page - 1, size);
         List<Question> questions = pageQuestions.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.questionsToQuestionResponseDtos(questions), pageQuestions),
+                new MultiResponseDto<>(questionMapper.questionsToQuestionResponseDtos(questions), pageQuestions),
                 HttpStatus.OK);
     }
 
@@ -75,5 +78,17 @@ public class QuestionController {
         questionService.deleteQuestion(questionId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{question-id}/comments")
+    public ResponseEntity postCommentOfQuestion(@PathVariable("question-id") long questionId,
+                                                @Valid @RequestBody CommentPostDto requestBody) {
+        requestBody.addQuestionId(questionId);
+        requestBody.addMemberId(questionService.findQuestion(questionId).getMember().getMemberId());
+
+        Comment createdComment = commentService.createComment(commentMapper.commentPostDtoToComment(requestBody));
+        URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdComment.getCommentId());
+
+        return ResponseEntity.created(location).build();
     }
 }

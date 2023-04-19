@@ -17,6 +17,12 @@ public class QuestionDto {
 
         @NotBlank(message = "질문 내용은 공백이 아니어야 합니다.")
         private String body;
+
+        private long memberId;
+
+        public void addMemberId(long memberId) {
+            this.memberId = memberId;
+        }
     }
 
     @Getter

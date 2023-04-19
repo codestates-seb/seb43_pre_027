@@ -28,18 +28,6 @@ public class CommentController {
         this.commentMapper = commentMapper;
     }
 
-
-    //댓글 생성, 수정, 삭제
-    @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto postDto) {
-        Comment comment = commentMapper.commentPostDtoToComment(postDto);
-        commentService.createComment(comment);
-        URI location = UriCreator.createUri(COMMENT_DEFAULT_URL, comment.getCommentId());
-
-        return ResponseEntity.created(location).build();
-
-    }
-
     @PatchMapping("/{comment-id}")  //수정요청
     public ResponseEntity patchComment(
             @PathVariable("comment-id") @Positive long commentId,

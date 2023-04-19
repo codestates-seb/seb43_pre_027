@@ -24,8 +24,13 @@ public class Comment extends Auditable {
 
     @Column(nullable = false)
     private Integer likeCount;
+
     @Column(nullable = false)
     private Boolean adopt;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private Comment.CommentStatus commentStatus = CommentStatus.COMMENT_REGISTERED;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
@@ -35,4 +40,15 @@ public class Comment extends Auditable {
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
 
+    public enum CommentStatus {
+        COMMENT_REGISTERED("댓글 등록"),
+        COMMENT_DELETED("댓글 삭제");
+
+        @Getter
+        private String status;
+
+        CommentStatus(String status) {
+            this.status = status;
+        }
+    }
 }

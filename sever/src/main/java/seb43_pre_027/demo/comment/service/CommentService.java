@@ -17,29 +17,30 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
     public Comment createComment(Comment comment){
-        return commentRepository.save(comment);}
+        return commentRepository.save(comment);
+    }
+
     public Comment updateComment(Comment comment){ //수정
         Comment findComment = findVerifiedComment(comment.getCommentId());// 이 아이디를 통해 해당 댓글이 있는지 확인
-    Optional.ofNullable(comment.getBody()).ifPresent(body->findComment.setBody(body));
 
-
+        Optional.ofNullable(comment.getBody()).ifPresent(body->findComment.setBody(body));
 
         return commentRepository.save(findComment);
     }
 
     public void deleteComment(long commentId) {
         Comment findComment = findVerifiedComment(commentId);
-        commentRepository.delete(findComment);
-
-
+        findComment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
+        commentRepository.save(findComment);
     }
+
     public Comment findVerifiedComment(long commentId){
         Optional<Comment> optionalComment =
                 commentRepository.findById(commentId);
         Comment findComment =
                 optionalComment.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
-            return findComment;
+                    new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
+        return findComment;
     }
 }
 

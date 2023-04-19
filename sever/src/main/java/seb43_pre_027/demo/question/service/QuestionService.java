@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
+import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.repository.QuestionRepository;
 
@@ -14,12 +15,15 @@ import java.util.Optional;
 @Service  //저장해야하고, 저장, 삭제 수정 이런 메서드들을 모아놓은 클래스
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final MemberService memberService;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, MemberService memberService) {
         this.questionRepository = questionRepository;
+        this.memberService = memberService;
     }
 
     public Question createQuestion(Question question) {
+        memberService.findVerifiedMember(question.getMember().getMemberId());
         return questionRepository.save(question);
     }
 
