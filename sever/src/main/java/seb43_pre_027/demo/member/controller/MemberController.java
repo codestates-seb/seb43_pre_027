@@ -25,7 +25,6 @@ import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION
 
 @RestController
 @RequestMapping("/member")
-@CrossOrigin()
 public class MemberController {
 
     private final MemberService memberService;
