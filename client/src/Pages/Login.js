@@ -119,6 +119,8 @@ const SignUp = styled.p`
   font-size: 13px;
 `;
 
+axios.defaults.withCredentials = true;
+
 function Login() {
   const [emailAlert, setEmailAlert] = useState('');
   const [passwordAlert, setPasswordAlert] = useState('');
@@ -138,9 +140,12 @@ function Login() {
 
     // 로그인 처리
     axios
-      .post('', { email, password }, { withCredentials: true })
+      .post('', {
+        username: email,
+        password,
+      })
       .then((res) => {
-        alert('로그인 성공!');
+        // 로그인 상태 바꾸기
         setLoginFailed('');
       })
       .catch((err) => {
