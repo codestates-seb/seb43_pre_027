@@ -26,42 +26,42 @@ const Container = styled.div`
   box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
     0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
 
-  .button-group {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-    gap: 4px;
-
-    button {
-      padding: 10px;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-
-    button:first-child {
-      color: #ffffff;
-      background-color: #0a95ff;
-
-      :hover {
-        background-color: #0881dd;
-      }
-    }
-
-    button:last-child {
-      color: #0a95ff;
-      background-color: #ffffff;
-
-      :hover {
-        background-color: #0a95ff10;
-      }
-    }
-  }
-
   p {
     color: hsl(210, 8%, 45%);
     font-size: 12px;
     line-height: 1.3;
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  gap: 4px;
+
+  button {
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button:first-child {
+    color: #ffffff;
+    background-color: #0a95ff;
+
+    :hover {
+      background-color: #0881dd;
+    }
+  }
+
+  button:last-child {
+    color: #0a95ff;
+    background-color: #ffffff;
+
+    :hover {
+      background-color: #0a95ff10;
+    }
   }
 `;
 
@@ -88,14 +88,14 @@ function Logout() {
         this device:
       </h1>
       <Container>
-        <div className="button-group">
+        <ButtonGroup>
           <button type="button" onClick={handleLogout}>
             Log out
           </button>
           <button type="button" onClick={handleCancel}>
             Cancel
           </button>
-        </div>
+        </ButtonGroup>
         <p>
           If you’re on a shared computer, remember to log out of your Open ID
           provider (Facebook, Google, Stack Exchange, etc.) as well.
