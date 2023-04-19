@@ -72,14 +72,21 @@ function AskQuestion() {
       </TitleBox>
       <Title버튼
         onClick={() => {
-          dispatch(addQuestion(새로운질문));
-          set타이틀내용('');
-          set바디내용('');
-          navigate('/');
+          if (바디내용.length >= 20 && 타이틀내용.length >= 5) {
+            dispatch(addQuestion(새로운질문));
+            set타이틀내용('');
+            set바디내용('');
+            navigate('/');
+          }
         }}
       >
         Post your question
       </Title버튼>
+      {타이틀내용.length < 5 && (
+        <p style={{ color: 'red' }}>
+          경고: 타이틀 내용은 5글자 이상이어야 합니다.
+        </p>
+      )}
       {바디내용.length < 20 && (
         <p style={{ color: 'red' }}>
           경고: 바디 내용은 20글자 이상이어야 합니다.
