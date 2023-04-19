@@ -38,19 +38,19 @@ let 임시질문자료 = createSlice({
       
       암기방법
       단순 암기가 아닌 암기법을 사용하여 효과적으로 기억해야 합니다. 자신만의 암기방법이 필요할 수도 있습니다.`,
-      userName: '조용주',
+      members_id: '조용주',
     },
     {
       id: 1,
       title: '모든걸알겠어요!',
       body: '코딩을 하는데 발전이 많이 많이 있는거 같습니다...',
-      userName: '강동욱',
+      members_id: '강동욱',
     },
     {
       id: 2,
       title: '내가 왜해야하죠!',
       body: '요즘 MZ들은 말이야',
-      userName: '정유주',
+      members_id: '정유주',
     },
   ],
   reducers: {

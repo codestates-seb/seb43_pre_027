@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 function AllQuestions() {
   let navigate = useNavigate();
-
   let 임시질문자료 = useSelector((state) => {
     return state.임시질문자료;
   });
@@ -27,7 +27,7 @@ function AllQuestions() {
           <질문Ul key={index}>
             <질문제목>{data.title}</질문제목>
             <질문바디>{data.body}</질문바디>
-            <유저네임>{data.userName}</유저네임>
+            <유저네임>{data.members_id}</유저네임>
           </질문Ul>
         );
       })}

@@ -12,15 +12,11 @@ function AskQuestion() {
   const [타이틀내용, set타이틀내용] = useState('');
   const [바디내용, set바디내용] = useState('');
 
-  let 임시질문자료 = useSelector((state) => {
-    return state.임시질문자료;
-  });
-
   let 새로운질문 = {
     id: 3,
     title: 타이틀내용,
     body: 바디내용,
-    userName: '김제발',
+    members_id: '김제발',
   };
 
   return (
@@ -54,6 +50,7 @@ function AskQuestion() {
         </div>
         <Title입력
           placeholder="e.g Is there an R function for finding the index of an element in a vector?"
+          type="text"
           value={타이틀내용}
           onChange={(e) => {
             set타이틀내용(e.target.value);
@@ -83,6 +80,11 @@ function AskQuestion() {
       >
         Post your question
       </Title버튼>
+      {바디내용.length < 20 && (
+        <p style={{ color: 'red' }}>
+          경고: 바디 내용은 20글자 이상이어야 합니다.
+        </p>
+      )}
     </Container>
   );
 }
@@ -168,6 +170,7 @@ let Title버튼 = styled.button`
   justify-content: center;
   align-items: center;
   color: #fff;
+  margin-bottom: 5px;
 `;
 
 let Body입력 = styled(Title입력)`

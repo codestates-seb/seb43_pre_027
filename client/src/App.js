@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 import { reset } from 'styled-reset';
 import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
