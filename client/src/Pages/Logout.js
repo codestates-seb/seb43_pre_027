@@ -1,4 +1,3 @@
-import { ButtonGroup, Container } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const Background = styled.div`
@@ -18,7 +17,7 @@ const Background = styled.div`
   }
 `;
 
-const Wrapper = styled.div`
+const Container = styled.div`
   max-width: 312px;
   padding: 24px;
   border-radius: 7px;
@@ -66,22 +65,32 @@ const Wrapper = styled.div`
 `;
 
 function Logout() {
+  const handleLogout = () => {};
+
+  const handleCancel = () => {
+    // useNavigate로 이전 페이지로 이동
+  };
+
   return (
     <Background>
       <h1>
         Clicking “Log out” will log you out of the following <br /> domains on
         this device:
       </h1>
-      <Wrapper>
+      <Container>
         <div className="button-group">
-          <button type="button">Log out</button>
-          <button type="button">Cancel</button>
+          <button type="button" onClick={handleLogout}>
+            Log out
+          </button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
         </div>
         <p>
           If you’re on a shared computer, remember to log out of your Open ID
           provider (Facebook, Google, Stack Exchange, etc.) as well.
         </p>
-      </Wrapper>
+      </Container>
     </Background>
   );
 }
