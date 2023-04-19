@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 import { ReactComponent as Alert } from '../Assets/alert.svg';
 
@@ -90,14 +91,28 @@ const FormGroup = styled.div`
   }
 `;
 
-const LoginBtn = styled.button`
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 3px;
-  color: #ffffff;
-  background-color: #0a95ff;
-  cursor: pointer;
+const ButtonGroup = styled.div`
+  button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: 9px;
+    color: #ffffff;
+    background-color: #0a95ff;
+    cursor: pointer;
+  }
+
+  p {
+    display: none;
+    color: #de4f54;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  p.login-failed {
+    display: block;
+  }
 `;
 
 const SignUp = styled.p`
@@ -107,6 +122,7 @@ const SignUp = styled.p`
 function Login() {
   const [emailAlert, setEmailAlert] = useState('');
   const [passwordAlert, setPasswordAlert] = useState('');
+  const [loginFailed, setLoginFailed] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -114,8 +130,22 @@ function Login() {
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
 
+    // 공백인 경우 alert 표시
     setEmailAlert(email === '' ? 'email alert-on' : '');
     setPasswordAlert(password === '' ? 'password alert-on' : '');
+
+    if (email === '' || password === '') return;
+
+    // 로그인 처리
+    axios
+      .post('', { email, password }, { withCredentials: true })
+      .then((res) => {
+        alert('로그인 성공!');
+        setLoginFailed('');
+      })
+      .catch((err) => {
+        setLoginFailed('login-failed');
+      });
   };
 
   return (
@@ -143,7 +173,10 @@ function Login() {
             </div>
             <p>Password cannot be empty.</p>
           </FormGroup>
-          <LoginBtn type="submit">Log in</LoginBtn>
+          <ButtonGroup>
+            <button type="submit">Log in</button>
+            <p className={loginFailed}>Login failed</p>
+          </ButtonGroup>
         </form>
       </Container>
       <SignUp>Don’t have an account? Sign up</SignUp>
