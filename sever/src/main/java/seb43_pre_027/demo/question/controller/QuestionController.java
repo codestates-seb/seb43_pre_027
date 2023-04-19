@@ -56,7 +56,7 @@ public class QuestionController {
     public ResponseEntity getQuestion(
             @PathVariable("question-id") @Positive long questionId) {
         Question question = questionService.findQuestion(questionId);
-        return new ResponseEntity<>(mapper.questionToQuestionResponseDto(question), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.questionToQuestionWithCommentResponseDto(question), HttpStatus.OK);
     }
 
     @GetMapping("/all-questions")

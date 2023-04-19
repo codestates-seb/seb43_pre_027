@@ -37,6 +37,9 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private Member.MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
