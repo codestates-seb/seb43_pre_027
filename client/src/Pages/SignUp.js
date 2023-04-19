@@ -68,22 +68,32 @@ const SignUpForm = styled.div`
     flex-direction: column;
     justify-content: center;
 
-    label {
-      margin-bottom: 5px;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    input {
-      padding: 7px 9px;
-      border: 1px solid #babfc4;
-      border-radius: 3px;
+    div {
+      display: flex;
+      flex-direction: column;
       margin-bottom: 25px;
-      outline: none;
 
-      :focus {
-        border-color: #0a95ff;
-        outline: 4px solid #0a95ff27;
+      label {
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      input {
+        padding: 7px 9px;
+        border: 1px solid #babfc4;
+        border-radius: 3px;
+        outline: none;
+
+        :focus {
+          border-color: #0a95ff;
+          outline: 4px solid #0a95ff27;
+        }
+      }
+
+      p {
+        display: none;
+        font-size: 12px;
       }
     }
 
@@ -102,11 +112,19 @@ const SignUpForm = styled.div`
   }
 
   .alert-on {
-    border-color: #de4f54;
-
-    :focus {
+    input {
+      margin-bottom: 8px;
       border-color: #de4f54;
-      outline: 4px solid #de4f5433;
+
+      :focus {
+        border-color: #de4f54;
+        outline: 4px solid #de4f5433;
+      }
+    }
+
+    p {
+      display: block;
+      color: #de4f54;
     }
   }
 `;
@@ -174,12 +192,21 @@ function SignUp() {
       </Overview>
       <SignUpForm>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="display-name">Display name</label>
-          <input type="text" id="display-name" className={displayNameAlert} />
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" className={emailAlert} />
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" className={passwordAlert} />
+          <div className={displayNameAlert}>
+            <label htmlFor="display-name">Display name</label>
+            <input type="text" id="display-name" />
+            <p>Display name cannot be empty.</p>
+          </div>
+          <div className={emailAlert}>
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" />
+            <p>Email cannot be empty.</p>
+          </div>
+          <div className={passwordAlert}>
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" />
+            <p>Password cannot be empty.</p>
+          </div>
           <button type="submit">Sign up</button>
         </form>
       </SignUpForm>
