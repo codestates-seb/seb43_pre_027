@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Background = styled.div`
   display: flex;
@@ -65,7 +66,16 @@ const Container = styled.div`
 `;
 
 function Logout() {
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    return axios
+      .post('')
+      .then((res) => {
+        // 로그인 상태 변경 (false)
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   const handleCancel = () => {
     // useNavigate로 이전 페이지로 이동
