@@ -14,10 +14,10 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class HelloUserAuthenticationProvider implements AuthenticationProvider {
-    private final HelloUserDetailsService userDetailsService;
+    private final MemberDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public HelloUserAuthenticationProvider(HelloUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public HelloUserAuthenticationProvider(MemberDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }

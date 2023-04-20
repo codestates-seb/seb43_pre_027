@@ -2,59 +2,54 @@ package seb43_pre_027.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import seb43_pre_027.demo.auth.filter.JwtAuthenticationFilter;
+import seb43_pre_027.demo.auth.handler.MemberAuthenticationFailureHandler;
+import seb43_pre_027.demo.auth.handler.MemberAuthenticationSuccessHandler;
+import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
 
-import java.util.Arrays;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfiguration {
+    private final JwtTokenizer jwtTokenizer;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+        this.jwtTokenizer = jwtTokenizer;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
-                .cors(Customizer.withDefaults())
-                .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
-                .headers().frameOptions().sameOrigin()
+                .headers().frameOptions().sameOrigin() // (1)
                 .and()
-                .csrf().disable()
-                .formLogin()
-                .loginProcessingUrl("/process_login")
-                .failureUrl("/")
+                .csrf().disable()        // (2)
+                .cors(withDefaults())    // (3)
+                .formLogin().disable()   // (4)
+                .httpBasic().disable()   // (5)
+                .apply(new CustomFilterConfigurer())
                 .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
-                .anyRequest()
-                .permitAll();
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()                // (6)
+                );
         return http.build();
     }
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
@@ -62,6 +57,19 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer,HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+
+            builder.addFilter(jwtAuthenticationFilter);
+        }
     }
 
     @Bean
@@ -74,5 +82,4 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
 }

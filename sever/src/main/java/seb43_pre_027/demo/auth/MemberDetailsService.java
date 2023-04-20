@@ -13,18 +13,18 @@ import seb43_pre_027.demo.exception.ExceptionCode;
 import java.util.Collection;
 import java.util.Optional;
 
-public class HelloUserDetailsService implements UserDetailsService {
+public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final HelloAuthorityUtils authorityUtils;
 
-    public HelloUserDetailsService(MemberRepository memberRepository, HelloAuthorityUtils authorityUtils) {
+    public MemberDetailsService(MemberRepository memberRepository, HelloAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
         this.authorityUtils = authorityUtils;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return new HelloUserDetails(findMember);
     }
