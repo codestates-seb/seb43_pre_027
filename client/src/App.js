@@ -22,7 +22,6 @@ function App() {
     <div>
       <GlobalStyles />
       <Routes>
-        {/* <Route path="/" element={isLogin ? <Mypage /> : <Login />} /> */}
         <Route path="/" element={<Questions />} />
         <Route path="/ask" element={<Ask />} />
       </Routes>

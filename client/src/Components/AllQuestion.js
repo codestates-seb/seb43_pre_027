@@ -1,13 +1,18 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function AllQuestions() {
   let navigate = useNavigate();
   let 임시질문자료 = useSelector((state) => {
     return state.임시질문자료;
   });
+
+  let [질문자료, set질문자료] = useState([]);
+
+  // 나중에 useEffect로 데이터 뜨게하면 될듯
 
   return (
     <Mainbar>
@@ -21,6 +26,20 @@ function AllQuestions() {
           Ask Question
         </버튼>
       </제목버튼묶음>
+      <button
+        onClick={() => {
+          axios
+            .get('https://codingapple1.github.io/shop/data2.json')
+            .then((결과) => {
+              console.log(결과.data);
+            })
+            .catch(() => {
+              console.log('실패함');
+            });
+        }}
+      >
+        데이터 받아오는 버튼
+      </button>
       <질문갯수>{임시질문자료.length} questions</질문갯수>
       {임시질문자료.map(function (data, index) {
         return (
