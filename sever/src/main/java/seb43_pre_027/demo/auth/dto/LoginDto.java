@@ -1,9 +1,9 @@
-package seb43_pre_027.demo.dto;
+package seb43_pre_027.demo.auth.dto;
 
 import lombok.Getter;
 
 @Getter
 public class LoginDto {
-    private String email;
+    private String username;
     private String password;
 }

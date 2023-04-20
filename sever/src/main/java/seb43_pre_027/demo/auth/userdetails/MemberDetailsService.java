@@ -1,47 +1,48 @@
-package seb43_pre_027.demo.auth;
+package seb43_pre_027.demo.auth.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import seb43_pre_027.demo.auth.utils.HelloAuthorityUtils;
-import seb43_pre_027.demo.member.entity.Member;
-import seb43_pre_027.demo.member.repository.MemberRepository;
+import org.springframework.stereotype.Component;
+import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
 import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
+import seb43_pre_027.demo.member.entity.Member;
+import seb43_pre_027.demo.member.repository.MemberRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Component
 public class MemberDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
-    private final HelloAuthorityUtils authorityUtils;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public MemberDetailsService(MemberRepository memberRepository, HelloAuthorityUtils authorityUtils) {
+    public MemberDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
         this.authorityUtils = authorityUtils;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Member> optionalMember = memberRepository.findByEmail(username);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return new HelloUserDetails(findMember);
+
+        return new MemberDetails(findMember);
     }
 
-
-    private final class HelloUserDetails extends Member implements UserDetails {
-        HelloUserDetails(Member member){
+    private final class MemberDetails extends Member implements UserDetails {
+        MemberDetails(Member member) {
             setMemberId(member.getMemberId());
             setEmail(member.getEmail());
-            setNickName(member.getNickName());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
         }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return authorityUtils.createAuthorities(this.getRoles());  // (2-3) 리팩토링 포인트
+            return authorityUtils.createAuthorities(this.getRoles());
         }
 
         @Override

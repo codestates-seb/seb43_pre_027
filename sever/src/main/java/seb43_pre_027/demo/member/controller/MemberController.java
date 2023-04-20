@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seb43_pre_027.demo.comment.entity.Comment;
-import seb43_pre_027.demo.member.dto.MemberPetchDto;
+import seb43_pre_027.demo.member.dto.MemberPatchDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.member.dto.MemberPostDto;
@@ -60,16 +60,17 @@ public class MemberController {
 
     @PatchMapping("/{member-id}")
     public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
-                                       @RequestBody MemberPetchDto memberPetchDto) {
-        Member member = memberMapper.memberPetchDtoToMember(memberPetchDto);
+                                       @RequestBody MemberPatchDto memberPatchDto) {
+        Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
         member.setMemberId(memberId);
         memberService.updateMember(member);
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id")
-                                 @Positive long memberId) {
+                                       @Positive long memberId) {
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
