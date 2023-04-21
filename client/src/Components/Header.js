@@ -1,7 +1,6 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, GlobalStyles } from 'styled-components';
 import { reset } from 'styled-reset';
 import React from 'react';
-import { GlobalStyles } from 'styled-components';
 
 const TopWrapper = styled.div`
   ${GlobalStyles}
