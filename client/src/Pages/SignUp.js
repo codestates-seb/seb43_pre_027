@@ -5,6 +5,7 @@ import { ReactComponent as Question } from '../Assets/icon/question.svg';
 import { ReactComponent as Vote } from '../Assets/icon/vote.svg';
 import { ReactComponent as Tag } from '../Assets/icon/tag.svg';
 import { ReactComponent as Badge } from '../Assets/icon/badge.svg';
+import { ReactComponent as Alert } from '../Assets/icon/alert.svg';
 
 const Background = styled.div`
   display: flex;
@@ -68,10 +69,13 @@ const SignUpForm = styled.div`
     flex-direction: column;
     justify-content: center;
 
+    > div {
+      margin-bottom: 25px;
+    }
+
     div {
       display: flex;
       flex-direction: column;
-      margin-bottom: 25px;
 
       label {
         margin-bottom: 5px;
@@ -111,9 +115,20 @@ const SignUpForm = styled.div`
     }
   }
 
+  .input-group {
+    margin-bottom: 8px;
+    position: relative;
+
+    svg {
+      display: none;
+      position: absolute;
+      top: 7px;
+      right: 8px;
+    }
+  }
+
   .alert-on {
     input {
-      margin-bottom: 8px;
       border-color: #de4f54;
 
       :focus {
@@ -122,8 +137,12 @@ const SignUpForm = styled.div`
       }
     }
 
+    svg,
     p {
       display: block;
+    }
+
+    p {
       color: #de4f54;
     }
   }
@@ -194,17 +213,26 @@ function SignUp() {
         <form onSubmit={handleSubmit}>
           <div className={displayNameAlert}>
             <label htmlFor="display-name">Display name</label>
-            <input type="text" id="display-name" />
+            <div className="input-group">
+              <input type="text" id="display-name" />
+              <Alert />
+            </div>
             <p>Display name cannot be empty.</p>
           </div>
           <div className={emailAlert}>
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" />
+            <div className="input-group">
+              <input type="email" id="email" />
+              <Alert />
+            </div>
             <p>Email cannot be empty.</p>
           </div>
           <div className={passwordAlert}>
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
+            <div className="input-group">
+              <input type="password" id="password" />
+              <Alert />
+            </div>
             <p>Password cannot be empty.</p>
           </div>
           <button type="submit">Sign up</button>
