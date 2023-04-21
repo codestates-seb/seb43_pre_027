@@ -22,7 +22,9 @@ function App() {
     <div>
       <GlobalStyles />
       <Routes>
+        {/* /questions */}
         <Route path="/" element={<Questions />} />
+        {/* /questions/ask */}
         <Route path="/ask" element={<Ask />} />
       </Routes>
     </div>
