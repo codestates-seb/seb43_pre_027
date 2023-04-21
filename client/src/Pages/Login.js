@@ -104,13 +104,13 @@ function Login() {
               label="Email"
               type="email"
               id="email"
-              alert={emailAlert}
+              alertMessage={emailAlert}
             />
             <AuthInput
               label="Password"
               type="password"
               id="password"
-              alert={passwordAlert}
+              alertMessage={passwordAlert}
             />
 
             <ButtonGroup>

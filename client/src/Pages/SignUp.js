@@ -83,14 +83,19 @@ function SignUp() {
             label="Display name"
             type="text"
             id="display-name"
-            alert={displayNameAlert}
+            alertMessage={displayNameAlert}
           />
-          <AuthInput label="Email" type="email" id="email" alert={emailAlert} />
+          <AuthInput
+            label="Email"
+            type="email"
+            id="email"
+            alertMessage={emailAlert}
+          />
           <AuthInput
             label="Password"
             type="password"
             id="password"
-            alert={passwordAlert}
+            alertMessage={passwordAlert}
           />
           <button type="submit">Sign up</button>
         </form>

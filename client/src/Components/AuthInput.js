@@ -67,15 +67,15 @@ const FormGroup = styled.div`
   }
 `;
 
-function AuthInput({ label, type, id, alert }) {
+function AuthInput({ label, type, id, alertMessage }) {
   return (
-    <FormGroup className={alert ? 'alert-on' : ''}>
+    <FormGroup className={alertMessage ? 'alert-on' : ''}>
       <label htmlFor={id}>{label}</label>
       <div className="input-group">
         <input type={type} id={id} />
         <Alert />
       </div>
-      <p>{alert}</p>
+      <p>{alertMessage}</p>
     </FormGroup>
   );
 }
