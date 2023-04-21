@@ -27,15 +27,20 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public Question updateQuestion(Question question) {
+    public Question updateQuestion(Question question,long memberId) {
         Question findQuestion = findVerifiedQuestion(question.getQuestionId());
+        long questionCreateMember = findQuestion.getMember().getMemberId();
+        checkMatchMember(memberId, questionCreateMember);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> findQuestion.setTitle(title));
         Optional.ofNullable(question.getBody())
                 .ifPresent(body -> findQuestion.setBody(body));
-
         return questionRepository.save(findQuestion);
+    }
+
+    private static void checkMatchMember(long memberId, long questionCreateMember) {
+        if(questionCreateMember != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
 
     public Question findQuestion(long questionId) {
@@ -47,9 +52,10 @@ public class QuestionService {
                 Sort.by("questionId").descending()));
     }
 
-    public void deleteQuestion(long questionId) {
+    public void deleteQuestion(long questionId,long memberId) {
         Question findQuestion = findVerifiedQuestion(questionId);
-
+        long questionCreateMember = findQuestion.getMember().getMemberId();
+        checkMatchMember(questionCreateMember,memberId);
         questionRepository.delete(findQuestion);
     }
 

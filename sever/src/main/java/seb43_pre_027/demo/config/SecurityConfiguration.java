@@ -13,9 +13,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import seb43_pre_027.demo.auth.filter.JwtAuthenticationFilter;
+import seb43_pre_027.demo.auth.filter.JwtVerificationFilter;
 import seb43_pre_027.demo.auth.handler.MemberAuthenticationFailureHandler;
 import seb43_pre_027.demo.auth.handler.MemberAuthenticationSuccessHandler;
 import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
 
 import java.util.Arrays;
 
@@ -25,9 +27,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
     }
 
     @Bean
@@ -39,7 +44,7 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new CustomFilterConfigurer())
+                .apply(new CustomFilterConfigurer())//아래의 CustomConfigurer를 추가해서 커스터마이징된 Configuration을 추가할 수 있음
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
@@ -62,17 +67,26 @@ public class SecurityConfiguration {
         return source;
     }
 
-
+    //구현한 Custom filter를 등록하는 역할을 함
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        //Custom Configurer를 구성해 Spring Security의 Configuration을 커스터마이징 할 수 있음
+        //AbstractHttpConfigurer를 상속해서 CustomConfigurer를 구현할 수 있음
+        //AbstractHttpConfigurer를 상속하는 타입과 HttpSecurityBuilder를 상속하는 타입을 제너릭 타입으로 지정 가능
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+            //Spring Security의 설정을 구성하는 SecurityConfigurer 간에 공유되는 객체를 얻을 수 있음
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            //필터를 생성하면서 authenticationManager와 jwtTokenizer를 di해줌
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login"); //기본 디폴트 requestUrl은 "/login"으로설정되어 있고 해당 메서드를 통해
+            //해당 필터의 processing url을 지정할 수 있다.
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // 추가
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // 추가
-            builder.addFilter(jwtAuthenticationFilter);
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,authorityUtils);
+            builder.addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);//해당 필터를 추가한다.
         }
     }
 }

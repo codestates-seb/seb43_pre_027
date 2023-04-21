@@ -22,11 +22,11 @@ public class Comment extends Auditable {
     @Column(nullable = false, length = 10000)
     private String body;
 
-    @Column(nullable = false)
-    private Integer likeCount;
+    @Column
+    private Integer likeCount = 0;
 
-    @Column(nullable = false)
-    private Boolean adopt;
+    @Column
+    private Boolean adopt = false;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)

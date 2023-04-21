@@ -11,6 +11,8 @@ import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.comment.mapper.CommentMapper;
 import seb43_pre_027.demo.comment.service.CommentService;
 import seb43_pre_027.demo.dto.MultiResponseDto;
+import seb43_pre_027.demo.member.entity.Member;
+import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.mapper.QuestionMapper;
@@ -32,28 +34,16 @@ public class QuestionController {
     private final QuestionMapper questionMapper;
     private final CommentService commentService;
     private final CommentMapper commentMapper;
+    private final MemberService memberService;
 
-    public QuestionController(QuestionService questionService,
-                              QuestionMapper questionMapper,
-                              CommentService commentService,
-                              CommentMapper commentMapper) {
+    public QuestionController(QuestionService questionService, QuestionMapper questionMapper, CommentService commentService, CommentMapper commentMapper, MemberService memberService) {
         this.questionService = questionService;
         this.questionMapper = questionMapper;
         this.commentService = commentService;
         this.commentMapper = commentMapper;
+        this.memberService = memberService;
     }
 
-    @PatchMapping("/{question-id}")
-    public ResponseEntity patchQuestion(
-            @PathVariable("question-id") @Positive long questionId,
-            @Valid @RequestBody QuestionDto.Patch requestBody) {
-        requestBody.setQuestionId(questionId);
-
-        Question question =
-                questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody));
-
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
-    }
 
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(
@@ -72,21 +62,19 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/{question-id}")
-    public ResponseEntity deleteQuestion(
-            @PathVariable("question-id") @Positive long questionId) {
-        questionService.deleteQuestion(questionId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/{question-id}/comments")
+    @PostMapping("/{member-id}/{question-id}/comments")
     public ResponseEntity postCommentOfQuestion(@PathVariable("question-id") long questionId,
+                                                @PathVariable("member-id") long memberId,
                                                 @Valid @RequestBody CommentPostDto requestBody) {
-        requestBody.addQuestionId(questionId);
-        requestBody.addMemberId(questionService.findQuestion(questionId).getMember().getMemberId());
+        Question verifiedQuestion = questionService.findVerifiedQuestion(questionId);
+        Member verifiedMember = memberService.findVerifiedMember(memberId);
+        Comment comment = commentMapper.commentPostDtoToComment(requestBody);
+        comment.setQuestion(verifiedQuestion);
+        comment.setMember(verifiedMember);
+        Comment createdComment = commentService.createComment(comment);
 
-        Comment createdComment = commentService.createComment(commentMapper.commentPostDtoToComment(requestBody));
+        log.info("===================comment객체: {}",comment);
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdComment.getCommentId());
 
         return ResponseEntity.created(location).build();

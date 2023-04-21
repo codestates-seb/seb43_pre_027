@@ -44,7 +44,7 @@ public class Question extends Auditable {
             this.member.getQuestions().add(this);
         }
     }
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question",cascade = { CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments = new ArrayList<>();
 
     public enum QuestionStatus {

@@ -8,7 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+/*
+Member의 Roles를 생성해줌
+권한을 생성해주는 클래스
+ */
 @Component
 public class CustomAuthorityUtils {
     @Value("${mail.address.admin}")
