@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { ReactComponent as Logo } from '../Assets/login-logo.svg';
-
 import AuthInput from '../Components/AuthInput';
+import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 
 const Background = styled.div`
   display: flex;
@@ -100,11 +99,7 @@ function Login() {
       <div className="container">
         <Logo className="logo" />
         <FormContainer>
-          <form
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
-          >
+          <form onSubmit={handleSubmit}>
             <AuthInput
               label="Email"
               type="email"
