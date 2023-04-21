@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
-import { ReactComponent as Alert } from '../Assets/alert.svg';
+import { ReactComponent as Alert } from '../Assets/icon/alert.svg';
 
 const Background = styled.div`
   display: flex;
