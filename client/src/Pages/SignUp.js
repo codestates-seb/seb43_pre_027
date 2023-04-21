@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import AuthInput from '../Components/AuthInput';
 import { ReactComponent as Question } from '../Assets/icon/question.svg';
 import { ReactComponent as Vote } from '../Assets/icon/vote.svg';
 import { ReactComponent as Tag } from '../Assets/icon/tag.svg';
 import { ReactComponent as Badge } from '../Assets/icon/badge.svg';
-import { ReactComponent as Alert } from '../Assets/icon/alert.svg';
 
 const Background = styled.div`
   display: flex;
@@ -69,38 +69,6 @@ const SignUpForm = styled.div`
     flex-direction: column;
     justify-content: center;
 
-    > div {
-      margin-bottom: 25px;
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        margin-bottom: 5px;
-        font-size: 15px;
-        font-weight: 700;
-      }
-
-      input {
-        padding: 7px 9px;
-        border: 1px solid #babfc4;
-        border-radius: 3px;
-        outline: none;
-
-        :focus {
-          border-color: #0a95ff;
-          outline: 4px solid #0a95ff27;
-        }
-      }
-
-      p {
-        display: none;
-        font-size: 12px;
-      }
-    }
-
     button {
       padding: 10px;
       border: none;
@@ -112,38 +80,6 @@ const SignUpForm = styled.div`
       :hover {
         background-color: #0b74c5;
       }
-    }
-  }
-
-  .input-group {
-    margin-bottom: 8px;
-    position: relative;
-
-    svg {
-      display: none;
-      position: absolute;
-      top: 7px;
-      right: 8px;
-    }
-  }
-
-  .alert-on {
-    input {
-      border-color: #de4f54;
-
-      :focus {
-        border-color: #de4f54;
-        outline: 4px solid #de4f5433;
-      }
-    }
-
-    svg,
-    p {
-      display: block;
-    }
-
-    p {
-      color: #de4f54;
     }
   }
 `;
@@ -160,9 +96,9 @@ function SignUp() {
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
 
-    setDisplayNameAlert(displayName === '' ? 'alert-on' : '');
-    setEmailAlert(email === '' ? 'alert-on' : '');
-    setPasswordAlert(password === '' ? 'alert-on' : '');
+    setDisplayNameAlert(displayName === '' && 'Display name cannot be empty.');
+    setEmailAlert(email === '' && 'Email cannot be empty.');
+    setPasswordAlert(password === '' && 'Password cannot be empty.');
 
     if (displayName === '' || email === '' || password === '') return;
 
@@ -211,30 +147,19 @@ function SignUp() {
       </Overview>
       <SignUpForm>
         <form onSubmit={handleSubmit}>
-          <div className={displayNameAlert}>
-            <label htmlFor="display-name">Display name</label>
-            <div className="input-group">
-              <input type="text" id="display-name" />
-              <Alert />
-            </div>
-            <p>Display name cannot be empty.</p>
-          </div>
-          <div className={emailAlert}>
-            <label htmlFor="email">Email</label>
-            <div className="input-group">
-              <input type="email" id="email" />
-              <Alert />
-            </div>
-            <p>Email cannot be empty.</p>
-          </div>
-          <div className={passwordAlert}>
-            <label htmlFor="password">Password</label>
-            <div className="input-group">
-              <input type="password" id="password" />
-              <Alert />
-            </div>
-            <p>Password cannot be empty.</p>
-          </div>
+          <AuthInput
+            label="Display name"
+            type="text"
+            id="display-name"
+            alert={displayNameAlert}
+          />
+          <AuthInput label="Email" type="email" id="email" alert={emailAlert} />
+          <AuthInput
+            label="Password"
+            type="password"
+            id="password"
+            alert={passwordAlert}
+          />
           <button type="submit">Sign up</button>
         </form>
       </SignUpForm>
