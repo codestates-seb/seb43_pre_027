@@ -76,6 +76,7 @@ function AskQuestion() {
             dispatch(addQuestion(새로운질문));
             set타이틀내용('');
             set바디내용('');
+            // /questions 로 바뀔예정
             navigate('/');
           }
         }}

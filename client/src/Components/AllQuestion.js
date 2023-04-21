@@ -10,9 +10,10 @@ function AllQuestions() {
     return state.임시질문자료;
   });
 
-  let [질문자료, set질문자료] = useState([]);
-
   // 나중에 useEffect로 데이터 뜨게하면 될듯
+  // useEffect(()=>{
+  // 코드 자리
+  // })
 
   return (
     <Mainbar>
@@ -20,13 +21,14 @@ function AllQuestions() {
         <제목글자>All Questions</제목글자>
         <버튼
           onClick={() => {
+            // /questions/ask 로 바뀔예정
             navigate('/ask');
           }}
         >
           Ask Question
         </버튼>
       </제목버튼묶음>
-      <button
+      {/* <button
         onClick={() => {
           axios
             .get('https://codingapple1.github.io/shop/data2.json')
@@ -39,11 +41,12 @@ function AllQuestions() {
         }}
       >
         데이터 받아오는 버튼
-      </button>
+      </button> */}
       <질문갯수>{임시질문자료.length} questions</질문갯수>
       {임시질문자료.map(function (data, index) {
         return (
           <질문Ul key={index}>
+            {/* 제목누르면 그 글 페이지로 이동하는거 만들예정 */}
             <질문제목>{data.title}</질문제목>
             <질문바디>{data.body}</질문바디>
             <유저네임>{data.members_id}</유저네임>
