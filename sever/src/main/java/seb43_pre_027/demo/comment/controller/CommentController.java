@@ -28,7 +28,7 @@ public class CommentController {
         this.commentMapper = commentMapper;
     }
 
-    @PatchMapping("/{comment-id}")  //수정요청
+    @PatchMapping("/{comment-id}")  //수정요청멤버에 병합시킬껀지(멤버확인하고 수정가능하게 변경해야함)
     public ResponseEntity patchComment(
             @PathVariable("comment-id") @Positive long commentId,
             @Valid @RequestBody CommentPatchDto patchDto) {
@@ -37,7 +37,7 @@ public class CommentController {
         commentService.updateComment(comment);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
+//두개다 멤버로 병합
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(
             @PathVariable("comment-id") @Positive long commentId) {

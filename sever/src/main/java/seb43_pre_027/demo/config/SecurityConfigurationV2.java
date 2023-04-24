@@ -23,6 +23,7 @@ import seb43_pre_027.demo.auth.handler.MemberAuthenticationEntryPoint;
 import seb43_pre_027.demo.auth.handler.MemberAuthenticationFailureHandler;
 import seb43_pre_027.demo.auth.handler.MemberAuthenticationSuccessHandler;
 import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
 import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.oauth.handler.OAuth2MemberSuccessHandler;
@@ -38,6 +39,7 @@ public class SecurityConfigurationV2 {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -81,7 +83,7 @@ public class SecurityConfigurationV2 {
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils,refreshTokenRepository);
 
             builder.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class); // (2)
         }

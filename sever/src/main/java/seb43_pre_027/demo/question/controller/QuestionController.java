@@ -69,12 +69,17 @@ public class QuestionController {
                                                 @Valid @RequestBody CommentPostDto requestBody) {
         Question verifiedQuestion = questionService.findVerifiedQuestion(questionId);
         Member verifiedMember = memberService.findVerifiedMember(memberId);
-        Comment comment = commentMapper.commentPostDtoToComment(requestBody);
-        comment.setQuestion(verifiedQuestion);
-        comment.setMember(verifiedMember);
+        Comment comment = commentMapper.commentPostDtoToComment(requestBody,verifiedMember,verifiedQuestion);
+        log.info("comment!!============================= {}", comment.getCommentId());
+        log.info("comment!!============================= {}", comment.getCommentStatus());
+        log.info("comment!!============================= {}", comment.getQuestion());
+        log.info("comment!!============================= {}", comment.getBody());
+        log.info("comment!!============================= {}", comment.getMember());
+        log.info("comment!!============================= {}", comment.getLikeCount());
+
+
         Comment createdComment = commentService.createComment(comment);
 
-        log.info("===================comment객체: {}",comment);
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdComment.getCommentId());
 
         return ResponseEntity.created(location).build();

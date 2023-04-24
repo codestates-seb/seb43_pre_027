@@ -2,10 +2,12 @@ package seb43_pre_027.demo.question.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import seb43_pre_027.demo.question.dto.CommentBody;
 import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.dto.QuestionWithCommentResponseDto;
 import seb43_pre_027.demo.question.entity.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +23,16 @@ public interface QuestionMapper {
             QuestionWithCommentResponseDto questionWithCommentResponseDto = new QuestionWithCommentResponseDto();
             questionWithCommentResponseDto.setTitle(question.getTitle());
             questionWithCommentResponseDto.setBody(question.getBody());
-            List<String> commentBodys = question.getComments().stream().map(comment -> comment.getBody()).collect(Collectors.toList());
-            questionWithCommentResponseDto.setCommentBodys(commentBodys);
+            questionWithCommentResponseDto.setModifiedAt(question.getModifiedAt());
+            questionWithCommentResponseDto.setCreatedAt(question.getCreatedAt());
+            questionWithCommentResponseDto.setNickName(question.getMember().getNickName());
+            List<CommentBody> commentBodies = new ArrayList<>();
+            for(int i =0; i<question.getComments().size(); i++){
+                CommentBody cb = new CommentBody(question.getComments().get(i).getBody(),
+                        question.getComments().get(i).getMember().getNickName());
+                commentBodies.add(cb);
+            }
+            questionWithCommentResponseDto.setCommentBodys(commentBodies);
             return questionWithCommentResponseDto;
         }
     }

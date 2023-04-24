@@ -36,6 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtTokenizer = jwtTokenizer;
     }
 
+
     @SneakyThrows
     @Override//내부에서 인증을 시도하는 로직
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
@@ -64,18 +65,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //authResult.getCredentials : null
         //authResult.getDetails : null
         //authResult.getAuthorities : [ROLE_USER]
+        try {
         Member member = (Member) authResult.getPrincipal(); //authResult객체는 인증결과 객체
-        String accessToken = delegateAccessToken(member); //accessToken생성
-        String refreshToken = delegateRefreshToken(member);//refreshToken 생성
-        //여기서 refreshToken을 repository에 저장해주면 될듯
-        response.setHeader("Authorization", "Bearer " + accessToken); //access Token을 추가함
-        //클라이언트 측에서 백엔드 애플리케이션 측에 요청을 보낼 때 마다 request header에 추가해서 클라이언트 측의 자격을 증명하는데 사용
-        response.setHeader("Refresh", refreshToken); //Access Token이 만료될 경우, 클라이언트 측이 Access Token을 새로 발급받기
-        //위해 클라이언트에게 추가적으로 제공될 수 있으며 Refresh Token을 Access Token과 함께 클라이언트에게 제공할지 여부는 애플리케이션의 요구사항에
-        //따라 달라질 수 있음
-
-        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);  // MemberAuthenticationSuccessHandler의
-                                                                                        //onAuthenticationSuccess메서드 호출
+            String accessToken = delegateAccessToken(member); //accessToken생성
+            String refreshToken = delegateRefreshToken(member);//refreshToken 생성
+            response.setHeader("Authorization", "Bearer " + accessToken); //access Token을 추가함
+            //클라이언트 측에서 백엔드 애플리케이션 측에 요청을 보낼 때 마다 request header에 추가해서 클라이언트 측의 자격을 증명하는데 사용
+            response.setHeader("Refresh", refreshToken); //Access Token이 만료될 경우, 클라이언트 측이 Access Token을 새로 발급받기
+            //위해 클라이언트에게 추가적으로 제공될 수 있으며 Refresh Token을 Access Token과 함께 클라이언트에게 제공할지 여부는 애플리케이션의 요구사항에
+            //따라 달라질 수 있음
+            this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);  // MemberAuthenticationSuccessHandler의
+                                                                                                //onAuthenticationSuccess메서드 호출
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String delegateAccessToken(Member member) {

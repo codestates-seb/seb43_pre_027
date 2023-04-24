@@ -1,19 +1,18 @@
 package seb43_pre_027.demo.auth.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import seb43_pre_027.demo.auth.entity.RefreshToken;
+import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
 
-import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +20,12 @@ import java.util.Map;
 @Slf4j
 @Component //JwtTokenizer클래스를 Spring Container(ApplicationContext)에 Bean으로 등록하기 위해 추가한 애너테이션
 public class JwtTokenizer {
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    public JwtTokenizer(RefreshTokenRepository refreshTokenRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
+
     @Getter
     @Value("${jwt.key}")
     private String secretKey;
@@ -63,13 +68,15 @@ public class JwtTokenizer {
     // ->인증된 사용자와 관련된 정보를 굳이 추가할 필요가 없음
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        return Jwts.builder()
+        String compact = Jwts.builder()
                 .setSubject(subject) //subject는 username:email이 들어감
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setRefreshToken(compact);
+        return compact;
     }
 
     // 검증 후, Claims을 반환 하는 용도
@@ -101,6 +108,24 @@ public class JwtTokenizer {
         Date expiration = calendar.getTime();
 
         return expiration;
+    }
+    public Claims validTokenAndReturnBody(String token,String base64EncodedSecretKey){
+        try {
+            Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch(ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new InvalidParameterException("유효하지 않은 토큰입니다");
+        }
+    }
+    public boolean checkTokenExpiration(String token){
+        String encodeBase64SecretKey = encodeBase64SecretKey(secretKey);
+        Date expiration = validTokenAndReturnBody(token,encodeBase64SecretKey).getExpiration();
+        return expiration.before(new Date());
     }
 
     //JWT의 서명에 사용할 Secret Key를 생성하는 역할

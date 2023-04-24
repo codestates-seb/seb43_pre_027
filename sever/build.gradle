@@ -40,6 +40,9 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.9.0'
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.session:spring-session-data-redis'
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	//configuration-processor
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	//oauth2

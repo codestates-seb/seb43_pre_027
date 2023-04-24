@@ -2,6 +2,7 @@ package seb43_pre_027.demo.auth.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
 import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +26,12 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {// OncePerRequestFilter를 확장해서 request당 한번만 실행되는 Security Filter를 구현가능
     private final JwtTokenizer jwtTokenizer; //JWT를 검증하고 Claims (우리는 username(email)이랑 Roles를 Claims에 Map으로 저장중)를 얻는 데 사용됨
     private final CustomAuthorityUtils authorityUtils; //검증 성공시 Authentication 객체에 채울 사용자의 권한을 생성하는데 사용함
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtVerificationFilter(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, RefreshTokenRepository refreshTokenRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -40,7 +43,12 @@ public class JwtVerificationFilter extends OncePerRequestFilter {// OncePerReque
         //이렇게 예외 처리를 하게 되면 에러가 발생했을 때 SecurityContext에 클라이언트의 인증 정보(Authentication 객체)가 저장 안됨
         //SecurityContext에 Authentication 객체가 저장되지 않은 상태로 다음 Security Filter로직을 수행하다 보면 결국에는 Filter 내부에서
         // AuthenticationException이 발생하게됨 -> 이 exception은 AuthenticationEntryPoint가 처리하게 됨
-        //
+        String refresh = request.getHeader("Refresh");
+        if(jwtTokenizer.checkTokenExpiration(refreshTokenRepository.findByRefreshToken(refresh).getRefreshToken())){
+            log.error("refreshToken이 만료되었습니다.");
+            filterChain.doFilter(request,response);
+            return;
+        }
         try {
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
@@ -65,12 +73,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {// OncePerReque
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String refresh = request.getHeader("Refresh");
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
         //Claims를 파싱할 수 있다는 의미는 내부적으로 서명 검증에 성공했다는 의미 왜?
         //request의 get Header에서 가져온 Authorization(accessToken)과 key를 통해 claims를 호출 하기 때문 만약 잘못된 accessToken을제공한다면
         //claims를 찾지 못할 것임 해당 오류에 대한 처리를 doFilterInternal에서 해주고 있음
-        log.info("claims : {}", claims);
+        log.info("now date : {}", new Date());
         return claims;
     }
 

@@ -1,8 +1,6 @@
 package seb43_pre_027.demo.comment.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import seb43_pre_027.demo.audit.Auditable;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.question.entity.Question;
@@ -13,6 +11,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Comment extends Auditable {
 
     @Id
