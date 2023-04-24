@@ -4,7 +4,8 @@ import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-
+import Header from './Components/Header';
+import Common from './Components/Common';
 const GlobalStyles = createGlobalStyle`
   ${reset}
   * {
@@ -21,6 +22,7 @@ function App() {
   return (
     <div>
       <GlobalStyles />
+      <Header />
       <Routes>
         {/* /questions */}
         <Route path="/" element={<Questions />} />
