@@ -1,9 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import { reset } from 'styled-reset';
-import Ask from './Pages/Ask';
-import Questions from './Pages/Questions';
-import { Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
 
 const GlobalStyles = createGlobalStyle`
   ${reset}
@@ -16,17 +14,10 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function App() {
-  // let [isLogin, setisLogin] = useState(false);
-
   return (
     <div>
       <GlobalStyles />
-      <Routes>
-        {/* /questions */}
-        <Route path="/" element={<Questions />} />
-        {/* /questions/ask */}
-        <Route path="/ask" element={<Ask />} />
-      </Routes>
+      <RouterProvider router={router} />
     </div>
   );
 }
