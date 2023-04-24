@@ -75,6 +75,14 @@ const HeaderContainer = styled.header`
 const Header = () => {
   const navigate = useNavigate();
 
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  const handleSignup = () => {
+    navigate('/signup');
+  };
+
   return (
     <HeaderContainer>
       <div className="header-container">
@@ -89,8 +97,15 @@ const Header = () => {
           <li>For Teams</li>
         </ul>
         <Search />
-        <CommonButton border="#799ac7">Login</CommonButton>
-        <CommonButton bgColor="#0a94ff" color="#fff" border="transparent">
+        <CommonButton onClick={handleLogin} border="#799ac7">
+          Login
+        </CommonButton>
+        <CommonButton
+          onClick={handleSignup}
+          bgColor="#0a94ff"
+          color="#fff"
+          border="transparent"
+        >
           Sign up
         </CommonButton>
       </div>

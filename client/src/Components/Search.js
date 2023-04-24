@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { ReactComponent as SearchIcon } from '../Assets/icon/searchIcon.svg';
+import { ReactComponent as SearchIcon } from '../Assets/icon/SearchIcon.svg';
 
 const SearchContainer = styled.form`
   position: relative;

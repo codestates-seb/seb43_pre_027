@@ -2,8 +2,9 @@ import styled, { useTheme } from 'styled-components';
 import { Link, Route } from 'react-router-dom';
 import { ReactComponent as Footerlogo } from '../Assets/icon/Footerlogo.svg';
 import { useState } from 'react';
+
 const FooterContainer = styled.footer`
-  width: 100%
+  width: 100%;
   background-color: #232629;
   color: #9099a1;
   .footer-container {

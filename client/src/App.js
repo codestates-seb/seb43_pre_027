@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import GlobalStyles from './Theme/GlobalStyles';
 import { reset } from 'styled-reset';
 import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
@@ -6,30 +6,25 @@ import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import Header from './Components/Header';
 import Common from './Components/Common';
-const GlobalStyles = createGlobalStyle`
-  ${reset}
-  * {
-    box-sizing: border-box;
-  }
-  body {
-      background-color: white;
-  }
-`;
+import Login from './Pages/Login';
+import Signup from './Pages/SignUp';
 
 function App() {
   // let [isLogin, setisLogin] = useState(false);
 
   return (
-    <div>
+    <>
       <GlobalStyles />
       <Header />
       <Routes>
         {/* /questions */}
-        <Route path="/" element={<Questions />} />
+        <Route path="/" element={<Common />} />
         {/* /questions/ask */}
         <Route path="/ask" element={<Ask />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
-    </div>
+    </>
   );
 }
 
