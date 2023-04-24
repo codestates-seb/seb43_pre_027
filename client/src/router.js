@@ -3,9 +3,10 @@ import Login from './Pages/Login';
 import Logout from './Pages/Logout';
 import SignUp from './Pages/SignUp';
 import UserInfo from './Pages/test-UserInfo';
-import Questions from './Pages/Questions';
 import QuestionsDetail from './Pages/test-QuestionsDetail';
 import Ask from './Pages/Ask';
+import Common from './Components/Common';
+import Header from './Components/Header';
 import NotFound from './Pages/test-NotFound';
 
 const auth = () => {
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/questions',
-    element: <Questions />,
+    element: (
+      <>
+        <Header />
+        <Common />
+      </>
+    ),
     loader: auth,
   },
   {
