@@ -23,6 +23,7 @@
     "no-console": 1,
     "react/jsx-filename-extension": 0,
     "no-unused-vars": 0,
+    "react/prop-types": "off",
 
     "prettier/prettier": [
       "error",
