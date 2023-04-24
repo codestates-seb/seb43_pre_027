@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.member.dto.MemberPatchDto;
+import seb43_pre_027.demo.member.dto.MyQuestionResponseDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.member.dto.MemberPostDto;
@@ -25,7 +26,7 @@ import java.util.List;
 import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION_DEFAULT_URL;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @Slf4j
 public class MemberController {
 
@@ -77,17 +78,16 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/myQuestion/{member-id}")
+    @GetMapping("/my-question/{member-id}")
     public ResponseEntity getMyQuestion(@PathVariable("member-id") long memberId) {
-        Member member = memberService.getMember(memberId);
-        List<Question> questions = member.getQuestions();
-
-        return new ResponseEntity(questions, HttpStatus.OK);
+        Member member = memberService.findVerifiedMember(memberId);
+        List<MyQuestionResponseDto> myQuestionResponseDtos = memberMapper.memberToMyQuestionResponseDtos(member);
+        return new ResponseEntity(myQuestionResponseDtos, HttpStatus.OK);
     }
 
-    @GetMapping("myComment/{member-id}")
+    @GetMapping("my-comment/{member-id}")
     public ResponseEntity getMyComment(@PathVariable("member-id") long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberService.findVerifiedMember(memberId);
         List<Comment> comments = member.getComments();
 
         return new ResponseEntity(comments, HttpStatus.OK);

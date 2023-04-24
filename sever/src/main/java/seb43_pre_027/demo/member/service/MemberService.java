@@ -43,13 +43,6 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member getMember(Long memberId){
-        Optional<Member> byId = memberRepository.findById(memberId);
-        Member findMember =
-                byId.orElseThrow(() ->
-                        null);
-        return findMember;
-    }
     public Member updateMember(Member member){
         Member findMember = findVerifiedMember(member.getMemberId());
         Optional.ofNullable(member.getNickName())
