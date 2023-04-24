@@ -15,17 +15,20 @@ const Background = styled.div`
 `;
 
 const SignUpForm = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-basis: 316px;
-  padding: 24px;
-  border-radius: 7px;
-  background-color: #ffffff;
-  box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
-    0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
+  gap: 40px;
 
   form {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 24px;
+    border-radius: 7px;
+    background-color: #ffffff;
+    box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
+      0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
 
     button {
       padding: 10px;
@@ -39,6 +42,11 @@ const SignUpForm = styled.div`
         background-color: #0b74c5;
       }
     }
+  }
+
+  .login {
+    font-size: 13px;
+    text-align: center;
   }
 `;
 
@@ -99,6 +107,7 @@ function SignUp() {
           />
           <button type="submit">Sign up</button>
         </form>
+        <p className="login">Already have an account? Log in</p>
       </SignUpForm>
     </Background>
   );
