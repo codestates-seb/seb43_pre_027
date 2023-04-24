@@ -29,8 +29,8 @@ public class QuestionService {
 
     public Question updateQuestion(Question question,long memberId) {
         Question findQuestion = findVerifiedQuestion(question.getQuestionId());
-        long questionCreateMember = findQuestion.getMember().getMemberId();
-        checkMatchMember(memberId, questionCreateMember);
+        long currentQuestionMemberId = findQuestion.getMember().getMemberId();
+        checkMatchQuestionMemberIdAndInjectedMemberId(memberId, currentQuestionMemberId);
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> findQuestion.setTitle(title));
@@ -39,8 +39,8 @@ public class QuestionService {
         return questionRepository.save(findQuestion);
     }
 
-    private static void checkMatchMember(long memberId, long questionCreateMember) {
-        if(questionCreateMember != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+    private static void checkMatchQuestionMemberIdAndInjectedMemberId(long memberId, long currentQuestionMemberId) {
+        if(currentQuestionMemberId != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
 
     public Question findQuestion(long questionId) {
@@ -54,8 +54,8 @@ public class QuestionService {
 
     public void deleteQuestion(long questionId, long memberId) {
         Question findQuestion = findVerifiedQuestion(questionId);
-        long questionCreateMember = findQuestion.getMember().getMemberId();
-        checkMatchMember(questionCreateMember, memberId);
+        long currentQuestionMemberId = findQuestion.getMember().getMemberId();
+        checkMatchQuestionMemberIdAndInjectedMemberId(currentQuestionMemberId, memberId);
         findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETED);
         questionRepository.save(findQuestion);
     }

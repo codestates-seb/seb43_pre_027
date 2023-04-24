@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import seb43_pre_027.demo.auth.dto.LoginDto;
+import seb43_pre_027.demo.comment.dto.CommentPatchDto;
 import seb43_pre_027.demo.comment.entity.Comment;
+import seb43_pre_027.demo.comment.mapper.CommentMapper;
+import seb43_pre_027.demo.comment.service.CommentService;
 import seb43_pre_027.demo.member.dto.MemberPatchDto;
 import seb43_pre_027.demo.member.dto.MyQuestionResponseDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
@@ -39,15 +42,21 @@ public class MemberController {
 
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     public MemberController(MemberService memberService,
                             MemberMapper memberMapper,
                             QuestionService questionService,
-                            QuestionMapper questionMapper) {
+                            QuestionMapper questionMapper,
+                            CommentService commentService,
+                            CommentMapper commentMapper) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
         this.questionService = questionService;
         this.questionMapper = questionMapper;
+        this.commentService = commentService;
+        this.commentMapper = commentMapper;
     }
 
     @GetMapping("/{member-id}")
@@ -133,6 +142,26 @@ public class MemberController {
         questionService.deleteQuestion(questionId,memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{member-id}/{comment-id}")  //수정요청멤버에 병합시킬껀지(멤버확인하고 수정가능하게 변경해야함)
+    public ResponseEntity patchComment(
+            @PathVariable("comment-id") @Positive long commentId,
+            @PathVariable("member-id") @Positive long memberId,
+            @Valid @RequestBody CommentPatchDto patchDto) {
+        Comment comment = commentMapper.commentPatchDtoToComment(patchDto);
+        comment.setCommentId(commentId);
+        commentService.updateComment(comment,memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    //두개다 멤버로 병합
+    @DeleteMapping("/{member-id}/{question-id}")
+    public ResponseEntity deleteComment(
+            @PathVariable("comment-id") @Positive long commentId,
+            @PathVariable("member-id") @Positive long memberId) {
+        commentService.deleteComment(commentId,memberId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
 }
