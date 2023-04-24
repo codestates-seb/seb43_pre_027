@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import axios from 'axios';
 
+import { useNavigate } from 'react-router-dom';
+
 const Background = styled.div`
   display: flex;
   flex-direction: column;
@@ -66,7 +68,15 @@ const ButtonGroup = styled.div`
 `;
 
 function Logout() {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
+    // 로그아웃 처리(임시)
+    document.cookie =
+      'token=%1234%; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    navigate('/');
+
+    /*
     return axios
       .post('')
       .then((res) => {
@@ -75,10 +85,12 @@ function Logout() {
       .catch((err) => {
         alert(err);
       });
+    */
   };
 
   const handleCancel = () => {
     // useNavigate로 이전 페이지로 이동
+    navigate(-1);
   };
 
   return (

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Overview from '../Components/Overview';
 import AuthInput from '../Components/AuthInput';
 
+import { Link, useNavigate } from 'react-router-dom';
+
 const Background = styled.div`
   display: flex;
   justify-content: center;
@@ -47,6 +49,15 @@ const SignUpForm = styled.div`
   .login {
     font-size: 13px;
     text-align: center;
+
+    a {
+      text-decoration: none;
+      color: #0274cb;
+
+      :hover {
+        color: #0d96ff;
+      }
+    }
   }
 `;
 
@@ -54,6 +65,8 @@ function SignUp() {
   const [displayNameAlert, setDisplayNameAlert] = useState('');
   const [emailAlert, setEmailAlert] = useState('');
   const [passwordAlert, setPasswordAlert] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,6 +81,10 @@ function SignUp() {
 
     if (displayName === '' || email === '' || password === '') return;
 
+    // 임시
+    navigate('/');
+
+    /*
     return axios
       .post('/api/users', {
         displayName,
@@ -76,10 +93,12 @@ function SignUp() {
       })
       .then((res) => {
         // 성공하면 로그인 페이지로 이동
+        navigate('/');
       })
       .catch((err) => {
         // 실패하면 에러 메시지 출력
       });
+    */
   };
 
   return (
@@ -107,7 +126,9 @@ function SignUp() {
           />
           <button type="submit">Sign up</button>
         </form>
-        <p className="login">Already have an account? Log in</p>
+        <p className="login">
+          Already have an account? <Link to="/">Log in</Link>
+        </p>
       </SignUpForm>
     </Background>
   );
