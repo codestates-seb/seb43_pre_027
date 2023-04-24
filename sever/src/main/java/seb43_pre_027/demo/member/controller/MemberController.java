@@ -1,13 +1,10 @@
 package seb43_pre_027.demo.member.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import seb43_pre_027.demo.auth.dto.LoginDto;
 import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.member.dto.MemberPatchDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
@@ -20,10 +17,8 @@ import seb43_pre_027.demo.question.mapper.QuestionMapper;
 import seb43_pre_027.demo.question.service.QuestionService;
 import seb43_pre_027.demo.utils.UriCreator;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -51,9 +46,8 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId,HttpServletRequest request) throws IOException {
-        Member verifiedMember = memberService.findVerifiedMember(memberId);
-        return new ResponseEntity(verifiedMember,HttpStatus.OK);
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
+        return null;
     }
 
     @PostMapping
@@ -107,8 +101,7 @@ public class MemberController {
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         question.setMember(verifiedMember);
-        Question createdQuestion =
-                questionService.createQuestion(question);
+        Question createdQuestion = questionService.createQuestion(question);
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdQuestion.getQuestionId());
 
         return ResponseEntity.created(location).build();

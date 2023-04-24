@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   h2:
     console:
       enabled: true
@@ -15,6 +17,18 @@ spring:
   sql:
     init:
       data-locations: classpath*:db/h2/data.sql
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+
+
 logging:
   level:
     org:

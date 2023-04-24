@@ -52,11 +52,12 @@ public class QuestionService {
                 Sort.by("questionId").descending()));
     }
 
-    public void deleteQuestion(long questionId,long memberId) {
+    public void deleteQuestion(long questionId, long memberId) {
         Question findQuestion = findVerifiedQuestion(questionId);
         long questionCreateMember = findQuestion.getMember().getMemberId();
-        checkMatchMember(questionCreateMember,memberId);
-        questionRepository.delete(findQuestion);
+        checkMatchMember(questionCreateMember, memberId);
+        findQuestion.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETED);
+        questionRepository.save(findQuestion);
     }
 
     public Question findVerifiedQuestion(long questionId) {
@@ -65,6 +66,10 @@ public class QuestionService {
         Question findQuestion =
                 optionalQuestion.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+        if (findQuestion.getQuestionStatus().equals(Question.QuestionStatus.QUESTION_DELETED)) {
+            throw new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND);
+        }
         return findQuestion;
     }
+
 }

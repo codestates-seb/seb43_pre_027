@@ -21,15 +21,16 @@ public class Member extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
-    @Column(nullable = false)
-    private String nickName;
+    @Column
+    private String nickName; // OAuth2 구현으로 인한 nullable 제거
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    private String location = "";
+    @Column
+    private String password; // OAuth2 구현으로 인한 nullable 제거
+
+    @Column
+    private String location = ""; // OAuth2 구현으로 인한 nullable 제거
 
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();
@@ -43,6 +44,10 @@ public class Member extends Auditable {
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private Member.MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+    public Member(String email) {
+        this.email = email;
+    }
 
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중"),

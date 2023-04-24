@@ -23,10 +23,10 @@ public class Comment extends Auditable {
     private String body;
 
     @Column
-    private Integer likeCount = 0;
+    private int likeCount;
 
     @Column
-    private Boolean adopt = false;
+    private boolean adopt;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
