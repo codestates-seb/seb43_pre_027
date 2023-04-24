@@ -155,7 +155,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     //두개다 멤버로 병합
-    @DeleteMapping("/{member-id}/{question-id}")
+    @DeleteMapping("/{member-id}/{comment-id}")
     public ResponseEntity deleteComment(
             @PathVariable("comment-id") @Positive long commentId,
             @PathVariable("member-id") @Positive long memberId) {
