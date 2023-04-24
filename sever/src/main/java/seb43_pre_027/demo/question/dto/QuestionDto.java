@@ -3,9 +3,12 @@ package seb43_pre_027.demo.question.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import seb43_pre_027.demo.question.entity.Question;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuestionDto {
 
@@ -51,5 +54,18 @@ public class QuestionDto {
         private int likeCount;
         private Question.QuestionStatus questionStatus;
 
+    }
+
+    @Getter
+    @Setter
+    public static class QuestionWithCommentResponseDto {
+        private String title;
+        private String nickName;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
+
+        private String body;
+
+        private List<CommentBody> commentBodys;
     }
 }

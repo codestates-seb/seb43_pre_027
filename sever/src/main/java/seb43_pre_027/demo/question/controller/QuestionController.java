@@ -6,14 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb43_pre_027.demo.comment.dto.CommentPostDto;
+import seb43_pre_027.demo.comment.dto.CommentDto;
 import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.comment.mapper.CommentMapper;
 import seb43_pre_027.demo.comment.service.CommentService;
 import seb43_pre_027.demo.dto.MultiResponseDto;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
-import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.mapper.QuestionMapper;
 import seb43_pre_027.demo.question.service.QuestionService;
@@ -66,7 +65,7 @@ public class QuestionController {
     @PostMapping("/{member-id}/{question-id}/comments")
     public ResponseEntity postCommentOfQuestion(@PathVariable("question-id") long questionId,
                                                 @PathVariable("member-id") long memberId,
-                                                @Valid @RequestBody CommentPostDto requestBody) {
+                                                @Valid @RequestBody CommentDto.Post requestBody) {
         Question verifiedQuestion = questionService.findVerifiedQuestion(questionId);
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         Comment comment = commentMapper.commentPostDtoToComment(requestBody,verifiedMember,verifiedQuestion);

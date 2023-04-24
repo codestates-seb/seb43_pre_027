@@ -4,23 +4,21 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import seb43_pre_027.demo.question.dto.CommentBody;
 import seb43_pre_027.demo.question.dto.QuestionDto;
-import seb43_pre_027.demo.question.dto.QuestionWithCommentResponseDto;
 import seb43_pre_027.demo.question.entity.Question;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuestionMapper {
     Question questionPostDtoToQuestion(QuestionDto.Post questionPostDto);
     Question questionPatchDtoToQuestion(QuestionDto.Patch questionPatchDto);
     QuestionDto.Response questionToQuestionResponseDto(Question question);
-    default QuestionWithCommentResponseDto questionToQuestionWithCommentResponseDto(Question question) {
+    default QuestionDto.QuestionWithCommentResponseDto questionToQuestionWithCommentResponseDto(Question question) {
         if (question == null) {
             return null;
         } else {
-            QuestionWithCommentResponseDto questionWithCommentResponseDto = new QuestionWithCommentResponseDto();
+            QuestionDto.QuestionWithCommentResponseDto questionWithCommentResponseDto = new QuestionDto.QuestionWithCommentResponseDto();
             questionWithCommentResponseDto.setTitle(question.getTitle());
             questionWithCommentResponseDto.setBody(question.getBody());
             questionWithCommentResponseDto.setModifiedAt(question.getModifiedAt());

@@ -4,18 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import seb43_pre_027.demo.auth.dto.LoginDto;
-import seb43_pre_027.demo.comment.dto.CommentPatchDto;
+import seb43_pre_027.demo.comment.dto.CommentDto;
 import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.comment.mapper.CommentMapper;
 import seb43_pre_027.demo.comment.service.CommentService;
-import seb43_pre_027.demo.member.dto.MemberPatchDto;
-import seb43_pre_027.demo.member.dto.MyQuestionResponseDto;
+import seb43_pre_027.demo.member.dto.MemberDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
-import seb43_pre_027.demo.member.dto.MemberPostDto;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
@@ -66,7 +62,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity SignUp(@Valid @RequestBody MemberPostDto memberPostDto) {
+    public ResponseEntity SignUp(@Valid @RequestBody MemberDto.Post memberPostDto) {
         Member member = memberMapper.memberPostDtoToMember(memberPostDto);
         Member createdMember = memberService.createMember(member);
 
@@ -77,7 +73,7 @@ public class MemberController {
 
     @PatchMapping("/{member-id}")
     public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
-                                       @RequestBody MemberPatchDto memberPatchDto) {
+                                       @RequestBody MemberDto.Patch memberPatchDto) {
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
         member.setMemberId(memberId);
         memberService.updateMember(member);
@@ -95,7 +91,7 @@ public class MemberController {
     @GetMapping("/my-question/{member-id}")
     public ResponseEntity getMyQuestion(@PathVariable("member-id") long memberId) {
         Member member = memberService.findVerifiedMember(memberId);
-        List<MyQuestionResponseDto> myQuestionResponseDtos = memberMapper.memberToMyQuestionResponseDtos(member);
+        List<MemberDto.MyQuestionResponseDto> myQuestionResponseDtos = memberMapper.memberToMyQuestionResponseDtos(member);
         return new ResponseEntity(myQuestionResponseDtos, HttpStatus.OK);
     }
 
@@ -148,7 +144,7 @@ public class MemberController {
     public ResponseEntity patchComment(
             @PathVariable("comment-id") @Positive long commentId,
             @PathVariable("member-id") @Positive long memberId,
-            @Valid @RequestBody CommentPatchDto patchDto) {
+            @Valid @RequestBody CommentDto.Patch patchDto) {
         Comment comment = commentMapper.commentPatchDtoToComment(patchDto);
         comment.setCommentId(commentId);
         commentService.updateComment(comment,memberId);
