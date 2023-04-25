@@ -38,15 +38,19 @@ public class CommentService {
         return commentRepository.save(findComment);
     }
 
-    private static void checkMatchCommentMemberIdAndInjectedMemberId(long memberId, Long currentCommentMemberId) {
-        if(currentCommentMemberId != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
-    }
 
-    public void deleteComment(long commentId,long memberId) {
+    public void deleteComment(long commentId, long memberId) {
         Comment findComment = findVerifiedComment(commentId);
         Long currentCommentMemberId = findComment.getMember().getMemberId();
         checkMatchCommentMemberIdAndInjectedMemberId(memberId, currentCommentMemberId);
         findComment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
+        commentRepository.save(findComment);
+    }
+    public void adoptComment(long memberId, long commentId) {
+        Comment findComment = findVerifiedComment(commentId);
+        Long currentCommentMemberId = findComment.getMember().getMemberId();
+        checkMatchCommentMemberIdAndInjectedMemberId(memberId, currentCommentMemberId);
+        findComment.setAdopt(true);
         commentRepository.save(findComment);
     }
 
@@ -58,6 +62,12 @@ public class CommentService {
                     new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         return findComment;
     }
+
+    private static void checkMatchCommentMemberIdAndInjectedMemberId(long memberId, Long currentCommentMemberId) {
+        if(currentCommentMemberId != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+    }
+
+
     public void createMock(){
         Question verifiedQuestion = questionService.findVerifiedQuestion(1);
         Member verifiedMember = memberService.findVerifiedMember(1);
