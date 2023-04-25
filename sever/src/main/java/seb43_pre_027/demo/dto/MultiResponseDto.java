@@ -1,6 +1,7 @@
 package seb43_pre_027.demo.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,5 +15,9 @@ public class MultiResponseDto<T> {
         this.data = data;
         this.pageInfo = new PageInfo(page.getNumber() + 1,
                 page.getSize(), page.getTotalElements(), page.getTotalPages());
+    }
+    public MultiResponseDto(List<T> data, PageInfo pageInfo) {
+        this.data = data;
+        this.pageInfo = pageInfo;
     }
 }

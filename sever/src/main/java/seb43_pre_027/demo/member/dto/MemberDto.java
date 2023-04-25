@@ -30,4 +30,16 @@ public class MemberDto {
         private Long questionId;
         private String title;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class MyCommentResponseDto {
+        private Long questionId;
+        private String questionTitle;
+        private Long commentId;
+        private String commentBody;
+
+
+    }
 }

@@ -6,11 +6,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
+import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.repository.QuestionRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service  //저장해야하고, 저장, 삭제 수정 이런 메서드들을 모아놓은 클래스
 public class QuestionService {
@@ -51,6 +54,14 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page, size,
                 Sort.by("questionId").descending()));
     }
+    public List<Question> findQuestionList(int page, int size) {
+        List<Question> all = questionRepository.findAll(Sort.by(Sort.Order.desc("questionId")));
+        List<Question> questions = all
+                .stream()
+                .filter(e -> !e.getQuestionStatus().equals(Question.QuestionStatus.QUESTION_DELETED))
+                .collect(Collectors.toList());
+        return questions;
+    }
 
     public void deleteQuestion(long questionId, long memberId) {
         Question findQuestion = findVerifiedQuestion(questionId);
@@ -70,6 +81,20 @@ public class QuestionService {
             throw new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND);
         }
         return findQuestion;
+    }
+
+
+    public  void testMockCreate(){
+        Member verifiedMember = memberService.findVerifiedMember(1);
+
+        for(int i =0;i<10;i++) {
+            Question question = new Question();
+            question.setBody("퀘스천 내용" +i);
+            question.setMember(verifiedMember);
+            question.setQuestionStatus(Question.QuestionStatus.QUESTION_REGISTERED);
+            question.setTitle("퀘스천타이틀" +i);
+            questionRepository.save(question);
+        }
     }
 
 }

@@ -36,23 +36,10 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
-    private final QuestionService questionService;
-    private final QuestionMapper questionMapper;
-    private final CommentService commentService;
-    private final CommentMapper commentMapper;
 
-    public MemberController(MemberService memberService,
-                            MemberMapper memberMapper,
-                            QuestionService questionService,
-                            QuestionMapper questionMapper,
-                            CommentService commentService,
-                            CommentMapper commentMapper) {
+    public MemberController(MemberService memberService, MemberMapper memberMapper) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
-        this.questionService = questionService;
-        this.questionMapper = questionMapper;
-        this.commentService = commentService;
-        this.commentMapper = commentMapper;
     }
 
     @GetMapping("/{member-id}")
@@ -95,69 +82,13 @@ public class MemberController {
         return new ResponseEntity(myQuestionResponseDtos, HttpStatus.OK);
     }
 
+
     //구현해야함
     @GetMapping("my-comment/{member-id}")
     public ResponseEntity getMyComment(@PathVariable("member-id") long memberId) {
         Member member = memberService.findVerifiedMember(memberId);
-        List<Comment> comments = member.getComments();
-
-        return new ResponseEntity(comments, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/{member-id}/questions",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity postQuestionOfMember(@Positive @PathVariable("member-id") long memberId,
-                                               @Valid @RequestBody QuestionDto.Post requestBody) {
-        requestBody.addMemberId(memberId);
-        Question question = questionMapper.questionPostDtoToQuestion(requestBody);
-        Member verifiedMember = memberService.findVerifiedMember(memberId);
-        question.setMember(verifiedMember);
-        Question createdQuestion =
-                questionService.createQuestion(question);
-        URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdQuestion.getQuestionId());
-
-        return ResponseEntity.created(location).build();
-    }
-
-    @PatchMapping("/{member-id}/{question-id}")
-    public ResponseEntity patchQuestionOfMember(
-            @PathVariable("question-id") @Positive long questionId,
-            @PathVariable("member-id") @Positive long memberId,
-            @Valid @RequestBody QuestionDto.Patch requestBody) {
-        requestBody.setQuestionId(questionId);
-
-        Question question =
-                questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody),memberId);
-
-        return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
-    }
-    @DeleteMapping("/{member-id}/{question-id}")
-    public ResponseEntity deleteQuestion(
-            @PathVariable("question-id") @Positive long questionId,
-            @PathVariable("member-id") @Positive long memberId) {
-        questionService.deleteQuestion(questionId,memberId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PatchMapping("/{member-id}/{comment-id}")  //수정요청멤버에 병합시킬껀지(멤버확인하고 수정가능하게 변경해야함)
-    public ResponseEntity patchComment(
-            @PathVariable("comment-id") @Positive long commentId,
-            @PathVariable("member-id") @Positive long memberId,
-            @Valid @RequestBody CommentDto.Patch patchDto) {
-        Comment comment = commentMapper.commentPatchDtoToComment(patchDto);
-        comment.setCommentId(commentId);
-        commentService.updateComment(comment,memberId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    //두개다 멤버로 병합
-    @DeleteMapping("/{member-id}/{comment-id}")
-    public ResponseEntity deleteComment(
-            @PathVariable("comment-id") @Positive long commentId,
-            @PathVariable("member-id") @Positive long memberId) {
-        commentService.deleteComment(commentId,memberId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
+        List<MemberDto.MyCommentResponseDto> myCommentResponseDtos = memberMapper.memberToMyCommentResponseDtos(member);
+        return new ResponseEntity(myCommentResponseDtos, HttpStatus.OK);
     }
 
 }

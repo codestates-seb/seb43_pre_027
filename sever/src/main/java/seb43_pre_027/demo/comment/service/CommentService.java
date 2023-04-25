@@ -1,5 +1,6 @@
 package seb43_pre_027.demo.comment.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.comment.repository.CommentRepository;
@@ -7,19 +8,20 @@ import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
+import seb43_pre_027.demo.question.entity.Question;
+import seb43_pre_027.demo.question.service.QuestionService;
 
 import javax.swing.plaf.PanelUI;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository; //서비스에서 레퍼지토리에 있는 메서들을 이용
     private final MemberService memberService;
+    private final QuestionService questionService;
 
-    public CommentService(CommentRepository commentRepository, MemberService memberService) {
-        this.commentRepository = commentRepository;
-        this.memberService = memberService;
-    }
+
 
     public Comment createComment(Comment comment){
         return commentRepository.save(comment);
@@ -55,6 +57,18 @@ public class CommentService {
                 optionalComment.orElseThrow(() ->
                     new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
         return findComment;
+    }
+    public void createMock(){
+        Question verifiedQuestion = questionService.findVerifiedQuestion(1);
+        Member verifiedMember = memberService.findVerifiedMember(1);
+        for(int i=0;i<10;i++){
+            Comment comment = new Comment();
+            comment.setMember(verifiedMember);
+            comment.setQuestion(verifiedQuestion);
+            comment.setBody("코멘트 바디" +i);
+            comment.setCommentStatus(Comment.CommentStatus.COMMENT_REGISTERED);
+            commentRepository.save(comment);
+        }
     }
 }
 
