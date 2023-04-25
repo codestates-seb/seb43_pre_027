@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.utils;
+package seb43_pre_027.demo.security.auth.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;

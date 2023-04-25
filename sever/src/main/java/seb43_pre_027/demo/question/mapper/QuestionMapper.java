@@ -8,13 +8,30 @@ import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuestionMapper {
     Question questionPostDtoToQuestion(QuestionDto.Post questionPostDto);
     Question questionPatchDtoToQuestion(QuestionDto.Patch questionPatchDto);
-    QuestionDto.Response questionToQuestionResponseDto(Question question);
+    default QuestionDto.Response questionToQuestionResponseDto(Question question){
+        if (question == null) {
+            return null;
+        } else {
+            QuestionDto.Response.ResponseBuilder response = QuestionDto.Response.builder();
+            if (question.getQuestionId() != null) {
+                response.questionId(question.getQuestionId());
+            }
+
+            response.title(question.getTitle());
+            response.body(question.getBody());
+            response.likeCount(question.getLikeCount());
+            response.questionStatus(question.getQuestionStatus());
+            response.memberNickName(question.getMember().getNickName());
+            return response.build();
+        }
+    };
     default QuestionDto.QuestionWithCommentResponseDto questionToQuestionWithCommentResponseDto(Question question) {
         if (question == null) {
             return null;

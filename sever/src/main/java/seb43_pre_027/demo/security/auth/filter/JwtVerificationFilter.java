@@ -1,9 +1,9 @@
-package seb43_pre_027.demo.auth.filter;
+package seb43_pre_027.demo.security.auth.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
-import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
-import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
+import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.security.auth.repository.RefreshTokenRepository;
+import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

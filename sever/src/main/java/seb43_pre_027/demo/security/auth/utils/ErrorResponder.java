@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.utils;
+package seb43_pre_027.demo.security.auth.utils;
 
 import seb43_pre_027.demo.response.ErrorResponse;
 import com.google.gson.Gson;

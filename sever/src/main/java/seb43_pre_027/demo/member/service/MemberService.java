@@ -4,7 +4,7 @@ package seb43_pre_027.demo.member.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
+import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
 import seb43_pre_027.demo.member.entity.Member;

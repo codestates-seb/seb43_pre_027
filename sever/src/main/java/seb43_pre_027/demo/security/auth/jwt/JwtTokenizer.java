@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.jwt;
+package seb43_pre_027.demo.security.auth.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import seb43_pre_027.demo.auth.entity.RefreshToken;
-import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
+import seb43_pre_027.demo.security.auth.entity.RefreshToken;
+import seb43_pre_027.demo.security.auth.repository.RefreshTokenRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;

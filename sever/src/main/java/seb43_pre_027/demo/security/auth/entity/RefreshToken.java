@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.entity;
+package seb43_pre_027.demo.security.auth.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

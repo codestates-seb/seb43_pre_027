@@ -1,11 +1,11 @@
-package seb43_pre_027.demo.auth.userdetails;
+package seb43_pre_027.demo.security.auth.userdetails;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
+import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 import seb43_pre_027.demo.exception.BusinessLogicException;
 import seb43_pre_027.demo.exception.ExceptionCode;
 import seb43_pre_027.demo.member.entity.Member;

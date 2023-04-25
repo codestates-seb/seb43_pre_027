@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.dto;
+package seb43_pre_027.demo.security.auth.dto;
 
 import lombok.Getter;
 /*

@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.auth.handler;
+package seb43_pre_027.demo.security.auth.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

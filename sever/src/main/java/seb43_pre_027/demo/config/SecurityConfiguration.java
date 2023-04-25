@@ -1,26 +1,22 @@
 package seb43_pre_027.demo.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import seb43_pre_027.demo.auth.filter.JwtAuthenticationFilter;
-import seb43_pre_027.demo.auth.filter.JwtVerificationFilter;
-import seb43_pre_027.demo.auth.handler.MemberAuthenticationFailureHandler;
-import seb43_pre_027.demo.auth.handler.MemberAuthenticationSuccessHandler;
-import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
-import seb43_pre_027.demo.auth.repository.RefreshTokenRepository;
-import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
+import seb43_pre_027.demo.security.auth.filter.JwtAuthenticationFilter;
+import seb43_pre_027.demo.security.auth.filter.JwtVerificationFilter;
+import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationFailureHandler;
+import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationSuccessHandler;
+import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.security.auth.repository.RefreshTokenRepository;
+import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 
 import java.util.Arrays;
 

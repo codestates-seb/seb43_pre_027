@@ -51,8 +51,11 @@ public class QuestionDto {
         private long questionId;
         private String title;
         private String body;
+        private String memberNickName; //작성자아이디
         private int likeCount;
         private Question.QuestionStatus questionStatus;
+
+        //작성자 닉네임
 
     }
 

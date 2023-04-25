@@ -1,9 +1,7 @@
-package seb43_pre_027.demo.auth.repository;
+package seb43_pre_027.demo.security.auth.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import seb43_pre_027.demo.auth.entity.RefreshToken;
-
-import java.util.Collection;
+import seb43_pre_027.demo.security.auth.entity.RefreshToken;
 
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Long> {

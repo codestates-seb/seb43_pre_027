@@ -1,4 +1,4 @@
-package seb43_pre_027.demo.oauth.handler;
+package seb43_pre_027.demo.security.oauth.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -7,8 +7,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
-import seb43_pre_027.demo.auth.jwt.JwtTokenizer;
-import seb43_pre_027.demo.auth.utils.CustomAuthorityUtils;
+import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
+import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
 

@@ -1,6 +1,6 @@
-package seb43_pre_027.demo.auth.handler;
+package seb43_pre_027.demo.security.auth.handler;
 
-import seb43_pre_027.demo.auth.utils.ErrorResponder;
+import seb43_pre_027.demo.security.auth.utils.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
