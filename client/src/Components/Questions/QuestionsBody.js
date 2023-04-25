@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import dummy from '../../data.json';
 
 const QuestionLayout = styled.div`
   display: grid;
@@ -121,7 +122,10 @@ function QuestionsBody() {
       </LayoutLeft>
       <LayoutRigth>
         <QuestionBody>
-          어떻게 하면 고수가 됩니까?{/*  질문 내용 넣기 */}
+          {/* 질문 본문 내용 */}
+          {dummy.questions.map((questions) => (
+            <li key={questions.body}>{questions.body}</li>
+          ))}
         </QuestionBody>
       </LayoutRigth>
     </QuestionLayout>

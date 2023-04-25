@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import AnswerItem from './AnswerItem';
-import AnswerCreate from './AnswerCreate';
 import styled from 'styled-components';
 
 const AnswerContainer = styled.div`
@@ -21,19 +21,36 @@ const AnswerHeader = styled.div`
   }
 `;
 
-// 등록된 답변이 있다면 AnswerItem이 노출되어야하고 없으면 미노출되어야 함
+const AnswerBodys = styled.div`
+  ul {
+    white-space: pre-wrap;
+  }
+`;
 
-function AnswerList() {
+const AnswerList = ({ addAnswer, setAddAnswer }) => {
   return (
     <AnswerContainer>
       <AnswerHeader>
-        {/* 답변 개수에 따라 변경 됨 */}
         <h2>Answer</h2>
       </AnswerHeader>
-      <AnswerItem />
-      <AnswerCreate />
+      <AnswerBodys>
+        <ul>
+          {addAnswer && // answerList가 있을때만 출력
+            addAnswer.map((answerItem) => {
+              if (answerItem.deleted) return null;
+              return (
+                <AnswerItem
+                  key={answerItem.id}
+                  answerItem={answerItem}
+                  addAnswer={addAnswer}
+                  setAddAnswer={setAddAnswer}
+                />
+              );
+            })}
+        </ul>
+      </AnswerBodys>
     </AnswerContainer>
   );
-}
+};
 
 export default AnswerList;

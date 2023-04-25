@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const AnswerWrapper = styled.div`
@@ -12,7 +13,7 @@ const AnswerWrapper = styled.div`
     line-height: 1.3;
     margin: 0 0 1em;
   }
-  textarea {
+  input {
     padding: 10px;
     margin: -1px 0 0;
     height: 200px;
@@ -42,13 +43,39 @@ const AnswerSubmit = styled.div`
   }
 `;
 
-function AnswerCreate() {
+function AnswerCreate({ addAnswer, setAddAnswer }) {
+  const [answer, setAnswer] = useState('');
+  const inputRef = useRef(null);
+  const onChangeInput = (e) => {
+    setAnswer(e.target.value);
+  };
+
+  const onClickAddButton = () => {
+    const nextAddAnswer = addAnswer.concat({
+      id: addAnswer.length,
+      answer,
+      deleted: false,
+    });
+    setAddAnswer(nextAddAnswer);
+
+    setAnswer('');
+    inputRef.current.focus();
+  };
+
   return (
     <AnswerWrapper>
       <h2>Your Answer</h2>
-      <textarea />
+      <input
+        type="textarea"
+        name="answeritem"
+        value={answer}
+        ref={inputRef}
+        onChange={onChangeInput}
+      />
       <AnswerSubmit>
-        <button>Post your answer</button>
+        <button type="submit" onClick={onClickAddButton}>
+          Post your answer
+        </button>
       </AnswerSubmit>
     </AnswerWrapper>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const AnswerLayout = styled.div`
@@ -73,9 +74,66 @@ const AnswerBody = styled.div`
   margin-bottom: 1.1em;
   clear: both;
   margin-top: 0;
+  li {
+    word-wrap: break-word;
+  }
 `;
 
-function AnswerItem() {
+const AnswerInfo = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-right: 0;
+  margin-left: 0;
+  margin: calc((8px * 1) / 2 * -1);
+`;
+
+const UserInfo = styled.div`
+  margin-right: 0;
+  margin-left: 0;
+  margin: calc((8px * 1) / 2);
+  box-sizing: border-box;
+  padding: 5px 6px 7px 7px;
+  text-align: left;
+  vertical-align: top;
+  width: 200px;
+`;
+
+const UserName = styled.div`
+  color: hsl(206, 100%, 40%);
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const AnswerEdit = styled.div`
+  padding-top: 2px * 1;
+  flex: 1 1 100px;
+  input {
+    padding: 10px;
+    margin: -1px 0 0;
+    height: 100px;
+    line-height: 1.3;
+    width: 100%;
+    font-size: 1.15384615rem;
+    tab-size: 4;
+  }
+  button {
+    border: none;
+    background-color: white;
+    color: hsl(210, 8%, 45%);
+  }
+`;
+
+const AnswerDelete = styled.div`
+  button {
+    border: none;
+    background-color: white;
+    color: hsl(210, 8%, 45%);
+  }
+`;
+
+function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
   const [answerScore, setAnswerScore] = useState(0);
 
   const handleUpVote = () => {
@@ -88,6 +146,39 @@ function AnswerItem() {
 
   const totalScore = answerScore;
   const totalVotes = Math.max(answerScore, 0) + Math.max(-answerScore, 0);
+  const [edited, setEdited] = useState(false);
+  const [newAnswer, setNewAnswer] = useState(answerItem.answer);
+
+  const onChangeEditInput = (e) => {
+    setNewAnswer(e.target.value);
+  };
+
+  const onClickSubmitButton = () => {
+    const nextAnswerList = addAnswer.map((item) => ({
+      ...item,
+      answer: item.id === answerItem.id ? newAnswer : item.answer,
+    }));
+    setAddAnswer(nextAnswerList);
+
+    setEdited(false);
+  };
+
+  const onClickEditButton = () => {
+    setEdited(true);
+  };
+
+  const editInputRef = useRef(null);
+
+  const onClickDeletButton = () => {
+    if (window.confirm('Are you sure you want to delete?')) {
+      const nextAnswerList = addAnswer.map((item) => ({
+        ...item,
+        deleted: item.id === answerItem.id ? true : item.deleted,
+      }));
+      setAddAnswer(nextAnswerList);
+    }
+  };
+
   return (
     <AnswerLayout>
       <LayoutLeft>
@@ -122,7 +213,38 @@ function AnswerItem() {
         </VoteGroupDown>
       </LayoutLeft>
       <LayoutRigth>
-        <AnswerBody>열심히 하시면 됩니다.{/*  답변 내용 넣기 */}</AnswerBody>
+        <AnswerBody>{answerItem.answer}</AnswerBody>
+        <AnswerInfo>
+          <AnswerDelete>
+            <button type="button" onClick={onClickDeletButton}>
+              Delete
+            </button>
+          </AnswerDelete>
+          <AnswerEdit>
+            {edited ? (
+              <input
+                type="textarea"
+                value={newAnswer}
+                ref={editInputRef}
+                onChange={onChangeEditInput}
+              />
+            ) : (
+              <span>{answerItem.text}</span>
+            )}
+            {edited ? (
+              <button type="button" onClick={onClickSubmitButton}>
+                👌
+              </button>
+            ) : (
+              <button type="button" onClick={onClickEditButton}>
+                Edited
+              </button>
+            )}
+          </AnswerEdit>
+          <UserInfo>
+            <UserName></UserName>
+          </UserInfo>
+        </AnswerInfo>
       </LayoutRigth>
     </AnswerLayout>
   );

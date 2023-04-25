@@ -1,0 +1,19 @@
+{
+    "questions" : [
+        {
+            "id": 1,
+            "title": "abcd",
+            "body": "가나다라",
+            "members_id": "김코딩",
+            "likecount": 5
+        }
+    ],
+    "answer" : [
+        {
+            "id": 3,
+            "body": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaqqqqqqqqqqqqqqqqqqq",
+            "members_id": "박코딩",
+            "likecount": 10
+        }
+    ]
+}

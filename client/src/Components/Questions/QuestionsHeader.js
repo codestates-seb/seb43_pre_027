@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import dummy from '../../data.json';
 
 const QuestionHeader = styled.div`
   flex-flow: row nowrap;
@@ -58,8 +59,12 @@ function QuestionsHeader() {
   return (
     <QuestionHeader>
       <QuestionTitle>
-        <h1>{/*title*/}</h1>
+        {/* 질문의 제목 영역 */}
+        {dummy.questions.map((questions) => (
+          <h1 key={questions.title}>{questions.title}</h1>
+        ))}
         <AskButton>
+          {/* 질문하기 버튼 클릭 시, 질문하기 페이지로 이동 */}
           <button onClick={handleAskQuestion}>Ask Question</button>
         </AskButton>
       </QuestionTitle>
