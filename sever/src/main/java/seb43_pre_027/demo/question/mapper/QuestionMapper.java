@@ -43,7 +43,22 @@ public interface QuestionMapper {
             questionWithCommentResponseDto.setCreatedAt(question.getCreatedAt());
             questionWithCommentResponseDto.setNickName(question.getMember().getNickName());
             List<CommentBody> commentBodies = new ArrayList<>();
-            for(int i =0; i<question.getComments().size(); i++){
+            boolean isAdopted = false;
+            for (int i = 0; i < question.getComments().size(); i++) {
+                if (question.getComments().get(i).isAdopt() && !question.getComments().get(i).getCommentStatus().equals(Comment.CommentStatus.COMMENT_DELETED)) {
+                    CommentBody cb = new CommentBody(question.getComments().get(i).getBody(),
+                            question.getComments().get(i).getMember().getNickName());
+                    commentBodies.add(cb);
+                    isAdopted = true;
+                    question.getComments().remove(i);
+                    break;
+                }
+            }
+            int a = 0;
+            if (isAdopted) {
+                a = 1;
+            }
+            for(int i = a; i < question.getComments().size(); i++) {
                 if(!question.getComments().get(i).getCommentStatus().equals(Comment.CommentStatus.COMMENT_DELETED))
                 {
                     CommentBody cb = new CommentBody(question.getComments().get(i).getBody(),

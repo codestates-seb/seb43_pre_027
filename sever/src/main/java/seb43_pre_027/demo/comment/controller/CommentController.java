@@ -24,10 +24,10 @@ import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION
 @RequestMapping("/comments")
 @Slf4j
 public class CommentController {
-    QuestionService questionService;
-    MemberService memberService;
-    CommentService commentService;
-    CommentMapper commentMapper;
+    private final QuestionService questionService;
+    private final MemberService memberService;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     public CommentController(QuestionService questionService, MemberService memberService, CommentService commentService, CommentMapper commentMapper) {
         this.questionService = questionService;
@@ -77,4 +77,13 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
+
+    @PostMapping("/adopt/{member-id}/{comment-id}")
+    public ResponseEntity adoptComment(
+            @PathVariable("member-id") long memberId,
+            @PathVariable("comment-id") long commentId) {
+        commentService.adoptComment(memberId, commentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    // 작성자만 채택 가능, 채택은 질문당 하나
 }
