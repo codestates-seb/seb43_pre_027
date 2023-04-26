@@ -5,7 +5,7 @@ import router from './router';
 function App() {
   return (
     <>
-    </div>
+      <GlobalStyles />
       <RouterProvider router={router} />
     </>
   );

@@ -3,11 +3,11 @@ import Login from './Pages/Login';
 import Logout from './Pages/Logout';
 import SignUp from './Pages/SignUp';
 import UserInfo from './Pages/test-UserInfo';
-import QuestionsDetail from './Pages/test-QuestionsDetail';
+import QuestionsDetail from './Pages/QuestionsDetail';
 import Ask from './Pages/Ask';
 import Common from './Components/Common';
 import Header from './Components/Header';
-import NotFound from './Pages/test-NotFound';
+import NotFound from './Pages/NotFound';
 
 const auth = () => {
   const value = localStorage.getItem('access_token');
