@@ -81,24 +81,22 @@ function SignUp() {
 
     if (displayName === '' || email === '' || password === '') return;
 
-    // 임시
-    navigate('/');
-
-    /*
     return axios
-      .post('/api/users', {
-        displayName,
+      .post('', {
+        nickName: displayName,
         email,
         password,
       })
       .then((res) => {
         // 성공하면 로그인 페이지로 이동
+        console.log(res);
         navigate('/');
       })
       .catch((err) => {
         // 실패하면 에러 메시지 출력
+        // 중복 이메일 에러 처리
+        console.log(err);
       });
-    */
   };
 
   return (

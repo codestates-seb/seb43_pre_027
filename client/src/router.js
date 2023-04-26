@@ -9,21 +9,9 @@ import Common from './Components/Common';
 import Header from './Components/Header';
 import NotFound from './Pages/test-NotFound';
 
-const auth = () => {
-  if (!document.cookie) {
-    return redirect('/');
-  }
+const auth = () => {};
 
-  return null;
-};
-
-const loggedIn = () => {
-  if (document.cookie) {
-    return redirect('/questions');
-  }
-
-  return null;
-};
+const loggedIn = () => {};
 
 const router = createBrowserRouter([
   {

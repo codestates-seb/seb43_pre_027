@@ -71,11 +71,6 @@ function Logout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // 로그아웃 처리(임시)
-    document.cookie =
-      'token=%1234%; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    navigate('/');
-
     /*
     return axios
       .post('')
