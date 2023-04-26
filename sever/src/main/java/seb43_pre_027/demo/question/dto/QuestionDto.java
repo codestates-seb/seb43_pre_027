@@ -52,7 +52,6 @@ public class QuestionDto {
         private String title;
         private String body;
         private String memberNickName; //작성자아이디
-        private int likeCount;
         private Question.QuestionStatus questionStatus;
 
         //작성자 닉네임
@@ -66,9 +65,7 @@ public class QuestionDto {
         private String nickName;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-
         private String body;
-
         private List<CommentBody> commentBodys;
     }
 }

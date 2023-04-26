@@ -23,9 +23,6 @@ public class Comment extends Auditable {
     private String body;
 
     @Column
-    private int likeCount;
-
-    @Column
     private boolean adopt;
 
     @Enumerated(value = EnumType.STRING)

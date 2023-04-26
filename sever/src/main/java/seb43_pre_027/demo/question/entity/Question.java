@@ -27,9 +27,6 @@ public class Question extends Auditable {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String body;
 
-    @Column
-    private int likeCount;
-
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_REGISTERED;

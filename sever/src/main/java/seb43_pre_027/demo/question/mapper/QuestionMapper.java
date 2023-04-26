@@ -26,7 +26,6 @@ public interface QuestionMapper {
 
             response.title(question.getTitle());
             response.body(question.getBody());
-            response.likeCount(question.getLikeCount());
             response.questionStatus(question.getQuestionStatus());
             response.memberNickName(question.getMember().getNickName());
             return response.build();

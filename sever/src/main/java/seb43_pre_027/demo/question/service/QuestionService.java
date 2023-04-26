@@ -25,12 +25,14 @@ public class QuestionService {
         this.memberService = memberService;
     }
 
-    public Question createQuestion(Question question) {
+    public Question createQuestion(Question question, long memberId) {
+        long currentQuestionMemberId = question.getMember().getMemberId();
+        checkMatchQuestionMemberIdAndInjectedMemberId(memberId, currentQuestionMemberId);
         memberService.findVerifiedMember(question.getMember().getMemberId());
         return questionRepository.save(question);
     }
 
-    public Question updateQuestion(Question question,long memberId) {
+    public Question updateQuestion(Question question, long memberId) {
         Question findQuestion = findVerifiedQuestion(question.getQuestionId());
         long currentQuestionMemberId = findQuestion.getMember().getMemberId();
         checkMatchQuestionMemberIdAndInjectedMemberId(memberId, currentQuestionMemberId);

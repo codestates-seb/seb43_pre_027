@@ -72,16 +72,21 @@ public class QuestionController {
                 HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{member-id}",
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity postQuestionOfMember(@Positive @PathVariable("member-id") long memberId,
+    @PostMapping
+    public ResponseEntity postQuestionOfMember(HttpServletRequest request,
                                                @Valid @RequestBody QuestionDto.Post requestBody) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        String username = (String) claims.get("username");
+        log.info("username : {}", username);
+        Member verifiedEmail = memberService.findVerifiedEmail(username);
+        Long memberId = verifiedEmail.getMemberId();
         requestBody.addMemberId(memberId);
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
-        Member verifiedMember = memberService.findVerifiedMember(memberId);
-        question.setMember(verifiedMember);
+        question.setMember(verifiedEmail);
         Question createdQuestion =
-                questionService.createQuestion(question);
+                questionService.createQuestion(question, memberId);
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdQuestion.getQuestionId());
 
         return ResponseEntity.created(location).build();
@@ -104,10 +109,16 @@ public class QuestionController {
 
         return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
-    @DeleteMapping("/{member-id}/{question-id}")
+    @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(
             @PathVariable("question-id") @Positive long questionId,
-            @PathVariable("member-id") @Positive long memberId) {
+            HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        String username = (String) claims.get("username");
+        Member verifiedEmail = memberService.findVerifiedEmail(username);
+        Long memberId = verifiedEmail.getMemberId();
         questionService.deleteQuestion(questionId,memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
