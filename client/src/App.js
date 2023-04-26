@@ -1,23 +1,13 @@
-import { createGlobalStyle } from 'styled-components';
-import { reset } from 'styled-reset';
-import QuestionsDetail from './Pages/QuestionsDetail';
-
-const GlobalStyles = createGlobalStyle`
-  ${reset}
-  * {
-    box-sizing:border-box;
-  }
-  body {
-    background-color: white;
-  }
-`;
+import { RouterProvider } from 'react-router-dom';
+import GlobalStyles from './Theme/GlobalStyles';
+import router from './router';
 
 function App() {
   return (
-    <div>
-      <GlobalStyles />
-      <QuestionsDetail />
+    <>
     </div>
+      <RouterProvider router={router} />
+    </>
   );
 }
 
