@@ -43,7 +43,8 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -51,7 +52,7 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())//아래의 CustomConfigurer를 추가해서 커스터마이징된 Configuration을 추가할 수 있음
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.GET, "/member/*").hasRole("ADMIN")     // (3) 추가
+                        .antMatchers(HttpMethod.GET, "/member/*").hasRole("USER")     // (3) 추가
                         .anyRequest().permitAll()
                 );
         return http.build();
@@ -65,8 +66,16 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
+
+        configuration.addAllowedOrigin("https://1f13-49-143-68-94.ngrok-free.app");
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Refresh");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

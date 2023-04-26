@@ -2,21 +2,15 @@ package seb43_pre_027.demo.member.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import seb43_pre_027.demo.comment.dto.CommentDto;
-import seb43_pre_027.demo.comment.entity.Comment;
-import seb43_pre_027.demo.comment.mapper.CommentMapper;
-import seb43_pre_027.demo.comment.service.CommentService;
+
 import seb43_pre_027.demo.member.dto.MemberDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.member.entity.Member;
-import seb43_pre_027.demo.question.dto.QuestionDto;
-import seb43_pre_027.demo.question.entity.Question;
-import seb43_pre_027.demo.question.mapper.QuestionMapper;
-import seb43_pre_027.demo.question.service.QuestionService;
+
 import seb43_pre_027.demo.utils.UriCreator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION_DEFAULT_URL;
-
+//memberid pathvariable로 들어가는 부분 jwt에서 claims에 memberid저장된거 꺼내서 memberid로 사용
 @RestController
 @RequestMapping("/members")
 @Slf4j
