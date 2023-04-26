@@ -12,7 +12,9 @@ import seb43_pre_027.demo.comment.entity.Comment;
 import seb43_pre_027.demo.comment.mapper.CommentMapper;
 import seb43_pre_027.demo.comment.service.CommentService;
 import seb43_pre_027.demo.dto.MultiResponseDto;
+import seb43_pre_027.demo.dto.MultiResponseDto2;
 import seb43_pre_027.demo.dto.PageInfo;
+import seb43_pre_027.demo.dto.TotalCount;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.question.dto.QuestionDto;
@@ -56,17 +58,11 @@ public class QuestionController {
     }
 
     @GetMapping("/all-questions")
-    public ResponseEntity getQuestions(@Positive @RequestParam int page,
-                                       @Positive @RequestParam int size) {
-        List<Question> questionList = questionService.findQuestionList(page, size);
-        ArrayList<Question> newQuestionList = new ArrayList<>();
-        for(int i = (page -1)*size;i<(page*size);i++){
-            if(i>= questionList.size()) break;
-            newQuestionList.add(questionList.get(i));
-        }
+    public ResponseEntity getQuestions() {
+        List<Question> questionList = questionService.findQuestionList();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(questionMapper.questionsToQuestionResponseDtos(newQuestionList),
-                        new PageInfo(page,size,questionList.size(),questionList.size()/size)),
+                new MultiResponseDto2<>(questionMapper.questionsToQuestionResponseDtos(questionList),
+                        new TotalCount(questionList.size())),
                 HttpStatus.OK);
     }
 

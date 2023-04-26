@@ -54,7 +54,7 @@ public class QuestionService {
         return questionRepository.findAll(PageRequest.of(page, size,
                 Sort.by("questionId").descending()));
     }
-    public List<Question> findQuestionList(int page, int size) {
+    public List<Question> findQuestionList() {
         List<Question> all = questionRepository.findAll(Sort.by(Sort.Order.desc("questionId")));
         List<Question> questions = all
                 .stream()
