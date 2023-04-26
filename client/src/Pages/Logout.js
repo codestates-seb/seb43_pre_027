@@ -1,7 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-
-import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
   display: flex;
@@ -72,8 +71,8 @@ function Logout() {
 
   const handleLogout = () => {
     // 로그아웃 처리(임시)
-    document.cookie =
-      'token=%1234%; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    // 로컬스토리지 지우기
+    localStorage.removeItem('access_token');
     navigate('/');
 
     /*

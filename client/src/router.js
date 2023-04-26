@@ -10,7 +10,9 @@ import Header from './Components/Header';
 import NotFound from './Pages/test-NotFound';
 
 const auth = () => {
-  if (!document.cookie) {
+  const value = localStorage.getItem('access_token');
+
+  if (!value) {
     return redirect('/');
   }
 
@@ -18,7 +20,9 @@ const auth = () => {
 };
 
 const loggedIn = () => {
-  if (document.cookie) {
+  const value = localStorage.getItem('access_token');
+
+  if (value) {
     return redirect('/questions');
   }
 
