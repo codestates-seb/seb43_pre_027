@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
 import AuthInput from '../Components/AuthInput';
 import { addUserId } from '../store';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
-
+import { ReactComponent as GoogleLogo } from '../Assets/icon/google-login-icon.svg';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Background = styled.div`
@@ -73,6 +73,27 @@ const SignUp = styled.p`
   }
 `;
 
+const GoogleOauthButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 1.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  margin: 5px 0px;
+  vertical-align: middle;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-align: center;
+  color: rgb(65, 63, 63);
+  background-color: #fff;
+  transition: all 0.6s ease;
+  cursor: pointer;
+`;
+
 axios.defaults.withCredentials = true;
 
 function Login() {
@@ -116,10 +137,41 @@ function Login() {
       });
   };
 
+  // Google Oauth
+  const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const oAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000&scope=https://www.googleapis.com/auth/userinfo.email`;
+
+  const handleGoogleLogin = () => {
+    window.location.assign(oAuthURL);
+  };
+
+  const search = window.location.search;
+  let authorizationCode;
+
+  if (search) {
+    authorizationCode = search.split('=')[1].split('&')[0];
+  }
+
+  // authorizationCode를 서버로 보내기
+  if (authorizationCode) {
+    console.log(authorizationCode);
+
+    axios
+      .post('', {
+        authorizationCode,
+      })
+      .then((res) => {})
+      .catch((err) => {});
+  }
+
   return (
     <Background>
       <div className="container">
         <Logo className="logo" />
+        <GoogleOauthButton onClick={handleGoogleLogin}>
+          <GoogleLogo />
+          Log in with Google
+        </GoogleOauthButton>
         <FormContainer>
           <form onSubmit={handleSubmit}>
             <AuthInput

@@ -86,12 +86,13 @@ function SignUp() {
 
     return axios
       .post('http://localhost:3000/register', {
-        displayName,
+        nickName: displayName,
         email,
         password,
       })
       .then((res) => {
         // 성공하면 로그인 페이지로 이동
+        console.log(res);
         navigate('/');
       })
       .catch((err) => {
