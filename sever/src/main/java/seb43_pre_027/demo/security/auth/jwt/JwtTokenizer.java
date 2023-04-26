@@ -8,11 +8,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import seb43_pre_027.demo.security.auth.entity.RefreshToken;
-import seb43_pre_027.demo.security.auth.repository.RefreshTokenRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidParameterException;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,12 +17,6 @@ import java.util.Map;
 @Slf4j
 @Component //JwtTokenizer클래스를 Spring Container(ApplicationContext)에 Bean으로 등록하기 위해 추가한 애너테이션
 public class JwtTokenizer {
-    private final RefreshTokenRepository refreshTokenRepository;
-
-    public JwtTokenizer(RefreshTokenRepository refreshTokenRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
-
     @Getter
     @Value("${jwt.key}")
     private String secretKey;
@@ -68,15 +59,13 @@ public class JwtTokenizer {
     // ->인증된 사용자와 관련된 정보를 굳이 추가할 필요가 없음
     public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-        String compact = Jwts.builder()
+
+        return Jwts.builder()
                 .setSubject(subject) //subject는 username:email이 들어감
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setRefreshToken(compact);
-        return compact;
     }
 
     // 검증 후, Claims을 반환 하는 용도
@@ -109,31 +98,11 @@ public class JwtTokenizer {
 
         return expiration;
     }
-    public Claims validTokenAndReturnBody(String token,String base64EncodedSecretKey){
-        try {
-            Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch(ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new InvalidParameterException("유효하지 않은 토큰입니다");
-        }
-    }
-    public boolean checkTokenExpiration(String token){
-        String encodeBase64SecretKey = encodeBase64SecretKey(secretKey);
-        Date expiration = validTokenAndReturnBody(token,encodeBase64SecretKey).getExpiration();
-        return expiration.before(new Date());
-    }
 
-    //JWT의 서명에 사용할 Secret Key를 생성하는 역할
+
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey); //Base64형식으로 인코딩 된 Secret Key를 디코딩 한 후 byte array를 반환
         Key key = Keys.hmacShaKeyFor(keyBytes);//key byte array를 기반으로 적절한 HAMC 알고리즘을 적용한 Key(java.security.Key) 객체를 생성함
-        //jjwt 0.9.x 버전에서는 서명 과정에서 HMAC 알고리즘을 직접 지정해야 했지만 최신 버전에서는 내부적으로 적절한 HMAC 알고리즘을 지정해줌!
-        //과거 방식 .signWith(key, SignatureAlgorithm.HS256) -> 사인 알고리즘을 지정해주고 있는것을 볼 수 있음
 
         return key;
     }

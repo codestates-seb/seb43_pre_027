@@ -31,9 +31,9 @@ public class MemberService {
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
-// OAuth2 사용 시 에러 때문에 잠깐 주석 처리 했습니다.
-//        String encryptedPassword = passwordEncoder.encode(member.getPassword());
-//        member.setPassword(encryptedPassword);
+
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);

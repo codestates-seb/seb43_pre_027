@@ -1,11 +1,15 @@
 package seb43_pre_027.demo.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -15,25 +19,22 @@ import seb43_pre_027.demo.security.auth.filter.JwtVerificationFilter;
 import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationFailureHandler;
 import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationSuccessHandler;
 import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
-import seb43_pre_027.demo.security.auth.repository.RefreshTokenRepository;
 import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
 
 import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-//@Configuration
-//@EnableWebSecurity(debug = true)
+@Configuration
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final RefreshTokenRepository refreshTokenRepository;
 
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, RefreshTokenRepository refreshTokenRepository) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
-        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Bean
@@ -56,7 +57,10 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -70,9 +74,6 @@ public class SecurityConfiguration {
 
     //구현한 Custom filter를 등록하는 역할을 함
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-        //Custom Configurer를 구성해 Spring Security의 Configuration을 커스터마이징 할 수 있음
-        //AbstractHttpConfigurer를 상속해서 CustomConfigurer를 구현할 수 있음
-        //AbstractHttpConfigurer를 상속하는 타입과 HttpSecurityBuilder를 상속하는 타입을 제너릭 타입으로 지정 가능
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
@@ -85,9 +86,8 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // 추가
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // 추가
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,authorityUtils,refreshTokenRepository);
-            builder.addFilter(jwtAuthenticationFilter)
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);//해당 필터를 추가한다.
+            builder.addFilter(jwtAuthenticationFilter);
+
         }
     }
 }

@@ -23,7 +23,6 @@ import java.util.Map;
 /*
 클라이언트의 로그인 인증 정보를 직접적으로 수신하여 인증 처리의 엔트리포인트(Entrypoint) 역할을 하는 Custom Filter
  */
-@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     //UsernamePasswordAuthenticationFilter를 상속하고 있음 UsernamePasswordAuthenticationFilter는 폼 로그인 방식에서 사용하는
     //Default Security Filter로써 폼 로그인이 아니더라도 Username/Password 기반의 인증을 처리하기 위해 UsernamePasswordAuthenticationFilter를
@@ -59,26 +58,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
-        //authResult : UsernamePasswordAuthenticationToken [Principal=seb43_pre_027.demo.auth.userdetails.MemberDetailsService$MemberDetails@4c489453,
-        // Credentials=[PROTECTED], Authenticated=true, Details=null, Granted Authorities=[ROLE_USER]]
-        //authResult.getPrincipal : seb43_pre_027.demo.auth.userdetails.MemberDetailsService$MemberDetails@2c7e2109
-        //authResult.getCredentials : null
-        //authResult.getDetails : null
-        //authResult.getAuthorities : [ROLE_USER]
-        try {
-        Member member = (Member) authResult.getPrincipal(); //authResult객체는 인증결과 객체
-            String accessToken = delegateAccessToken(member); //accessToken생성
-            String refreshToken = delegateRefreshToken(member);//refreshToken 생성
-            response.setHeader("Authorization", "Bearer " + accessToken); //access Token을 추가함
-            //클라이언트 측에서 백엔드 애플리케이션 측에 요청을 보낼 때 마다 request header에 추가해서 클라이언트 측의 자격을 증명하는데 사용
-            response.setHeader("Refresh", refreshToken); //Access Token이 만료될 경우, 클라이언트 측이 Access Token을 새로 발급받기
-            //위해 클라이언트에게 추가적으로 제공될 수 있으며 Refresh Token을 Access Token과 함께 클라이언트에게 제공할지 여부는 애플리케이션의 요구사항에
-            //따라 달라질 수 있음
-            this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);  // MemberAuthenticationSuccessHandler의
-                                                                                                //onAuthenticationSuccess메서드 호출
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        Member member = (Member) authResult.getPrincipal();
+
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
+        response.setHeader("Authorization", "Bearer " + accessToken);
+
+        response.setHeader("Refresh", refreshToken);
+
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+
     }
 
     private String delegateAccessToken(Member member) {
@@ -94,7 +84,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //Plain Text 형태인 Secret Key의 Byte[]를 Base64 형식의 문자열로 인코딩해줌 자세한 사항은 JwtTokenizer에서 해당 메서드확인
         String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
         //AccessToken을 생성해준다
-        log.info("accessToken: {} ",accessToken);
         return accessToken;
     }
 
@@ -107,7 +96,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //Plain Text 형태인 Secret Key의 Byte[]를 Base64 형식의 문자열로 인코딩해줌 자세한 사항은 JwtTokenizer에서 해당 메서드확인
         String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
         //리프레시토큰을 생성해준다
-        log.info("refreshToken: {}", refreshToken);
         return refreshToken;
     }
 }
