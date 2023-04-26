@@ -5,7 +5,7 @@ import SignUp from './Pages/SignUp';
 import UserInfo from './Pages/test-UserInfo';
 import QuestionsDetail from './Pages/QuestionsDetail';
 import Ask from './Pages/Ask';
-import Common from './Components/Common';
+import Questions from './Pages/Questions';
 import Header from './Components/Header';
 import NotFound from './Pages/NotFound';
 
@@ -48,28 +48,23 @@ const router = createBrowserRouter([
   },
   {
     path: '/questions',
-    element: (
-      <>
-        <Header />
-        <Common />
-      </>
-    ),
-    loader: auth,
+    element: <Questions />,
+    // loader: auth,
   },
   {
     path: '/questions/:id',
     element: <QuestionsDetail />,
-    loader: auth,
+    // loader: auth,
   },
   {
     path: '/ask',
     element: <Ask />,
-    loader: auth,
+    // loader: auth,
   },
   {
     path: '/userinfo',
     element: <UserInfo />,
-    loader: auth,
+    // loader: auth,
   },
 ]);
 

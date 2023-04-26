@@ -112,7 +112,7 @@ function AskQuestion() {
 export default AskQuestion;
 
 let Container = styled.div`
-  padding: 0px 24px 24px 24px;
+  padding: 24px 24px 24px 24px;
 `;
 
 let 제목 = styled.div`

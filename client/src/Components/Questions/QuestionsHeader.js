@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const QuestionHeader = styled.div`
@@ -7,7 +8,7 @@ const QuestionHeader = styled.div`
 `;
 
 const QuestionTitle = styled.div`
-  overflow-wrap: break-word;
+  display: flex;
   h1 {
     overflow-wrap: break-word;
     font-size: 2.07692308rem;
@@ -19,14 +20,10 @@ const QuestionTitle = styled.div`
 `;
 
 const AskButton = styled.div`
-  margin-left: 100%;
-  display: inline-block;
-  position: relative;
   button {
     background-color: rgb(0, 162, 255);
     border-color: rgb(0, 162, 255);
     color: white;
-    width: 150%;
     padding: 10px 10px;
   }
 `;
@@ -54,9 +51,7 @@ const TimeLine = styled.div`
 `;
 
 function QuestionsHeader({ title, nickName }) {
-  const handleAskQuestion = () => {
-    // 질문하기 경로 입력
-  };
+  let navigator = useNavigate();
   return (
     <QuestionHeader>
       <QuestionTitle>
@@ -64,7 +59,13 @@ function QuestionsHeader({ title, nickName }) {
         <h1>{title}</h1>
         <AskButton>
           {/* 질문하기 버튼 클릭 시, 질문하기 페이지로 이동 */}
-          <button onClick={handleAskQuestion}>Ask Question</button>
+          <button
+            onClick={() => {
+              navigator('/ask');
+            }}
+          >
+            Ask Question
+          </button>
         </AskButton>
       </QuestionTitle>
       <QuestionInfo>
