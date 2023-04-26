@@ -7,11 +7,6 @@ axios.defaults.withCredentials = true;
 function AllQuestions() {
   let navigate = useNavigate();
   let [QuestionList, setQuestionList] = useState([]);
-  // 나중에 useEffect로 데이터 뜨게하면 될듯
-  // id순서대로 넣기
-  // QuestionList.find((a)=>{
-  //   a.id == id
-  // })
   useEffect(() => {
     axios
       .get('/questions/all-questions', {
@@ -20,7 +15,6 @@ function AllQuestions() {
         },
       })
       .then((결과) => {
-        console.log(결과.data.data);
         setQuestionList(결과.data.data);
       })
       .catch(() => {
@@ -34,7 +28,6 @@ function AllQuestions() {
         <제목글자>All Questions</제목글자>
         <버튼
           onClick={() => {
-            // /ask 로 바뀔예정
             navigate('/ask');
           }}
         >
@@ -46,9 +39,13 @@ function AllQuestions() {
       {QuestionList.map(function (data, index) {
         return (
           <질문Ul key={index}>
-            {/* 제목누르면 그 글 페이지로 이동하는거 만들예정 */}
-            {/* data를 QuestionList로 바꾸어 주면된다. */}
-            <질문제목>{data.title}</질문제목>
+            <질문제목
+              onClick={() => {
+                navigate(`/questions/${data.questionId}`);
+              }}
+            >
+              {data.title}
+            </질문제목>
             <질문바디>{data.body}</질문바디>
             <유저네임>{data.memberNickName}</유저네임>
           </질문Ul>
@@ -95,6 +92,7 @@ let 버튼 = styled.button`
   justify-content: center;
   align-items: center;
   color: #fff;
+  cursor: pointer;
 `;
 
 let 질문갯수 = styled.div`
@@ -105,7 +103,8 @@ let 질문갯수 = styled.div`
 `;
 
 let 질문Ul = styled.ul`
-  height: 126.078px;
+  display: flex;
+  flex-direction: column;
   padding: 16px;
   // 질문사이에 선넣기
   border-bottom: 1px solid #e3e6e8;
@@ -116,6 +115,11 @@ let 질문제목 = styled.h3`
   font-size: 17px;
   padding-right: 24px;
   margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
 `;
 
 let 질문바디 = styled.h3`
