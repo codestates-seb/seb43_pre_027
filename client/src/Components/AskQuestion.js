@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addQuestion } from './../store.js';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function AskQuestion() {
   const dispatch = useDispatch();
@@ -11,13 +12,30 @@ function AskQuestion() {
 
   const [타이틀내용, set타이틀내용] = useState('');
   const [바디내용, set바디내용] = useState('');
-
-  let 새로운질문 = {
-    id: 3,
-    title: 타이틀내용,
-    body: 바디내용,
-    members_id: '김제발',
-  };
+  console.log(String(타이틀내용));
+  console.log(바디내용);
+  // useEffect(() => {
+  //   axios
+  //     .post(
+  //       // 멤버 아이디가 1대신 들어감
+  //       '/questions/1',
+  //       {
+  //         title: '안녕',
+  //         body: '안녕',
+  //       },
+  //       {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': '69420',
+  //         },
+  //       }
+  //     )
+  //     .then((결과) => {
+  //       console.log(결과.data.data);
+  //     })
+  //     .catch(() => {
+  //       console.log('실패함');
+  //     });
+  // }, []);
 
   return (
     <Container>
@@ -73,12 +91,30 @@ function AskQuestion() {
       <Title버튼
         onClick={() => {
           if (바디내용.length >= 20 && 타이틀내용.length >= 5) {
-            dispatch(addQuestion(새로운질문));
             set타이틀내용('');
             set바디내용('');
-            // /questions 로 바뀔예정
-            navigate('/');
+            navigate('/ask');
           }
+          axios
+            .post(
+              // 멤버 아이디가 1대신 들어감
+              '/questions/1',
+              {
+                title: 타이틀내용,
+                body: 바디내용,
+              },
+              {
+                headers: {
+                  'ngrok-skip-browser-warning': '69420',
+                },
+              }
+            )
+            .then((결과) => {
+              console.log(결과.data.data);
+            })
+            .catch(() => {
+              console.log('실패함');
+            });
         }}
       >
         Post your question
@@ -179,6 +215,7 @@ let Title버튼 = styled.button`
   align-items: center;
   color: #fff;
   margin-bottom: 5px;
+  cursor: pointer;
 `;
 
 let Body입력 = styled(Title입력)`

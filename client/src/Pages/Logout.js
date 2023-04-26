@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -66,7 +67,15 @@ const ButtonGroup = styled.div`
 `;
 
 function Logout() {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
+    // 로그아웃 처리(임시)
+    // 로컬스토리지 지우기
+    localStorage.removeItem('access_token');
+    navigate('/');
+
+    /*
     return axios
       .post('')
       .then((res) => {
@@ -75,10 +84,12 @@ function Logout() {
       .catch((err) => {
         alert(err);
       });
+    */
   };
 
   const handleCancel = () => {
     // useNavigate로 이전 페이지로 이동
+    navigate(-1);
   };
 
   return (

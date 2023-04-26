@@ -3,17 +3,24 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+axios.defaults.withCredentials = true;
 function AllQuestions() {
   let navigate = useNavigate();
-  let 임시질문자료 = useSelector((state) => {
-    return state.임시질문자료;
-  });
-
-  // 나중에 useEffect로 데이터 뜨게하면 될듯
-  // useEffect(()=>{
-  // 코드 자리
-  // })
+  let [QuestionList, setQuestionList] = useState([]);
+  useEffect(() => {
+    axios
+      .get('/questions/all-questions', {
+        headers: {
+          'ngrok-skip-browser-warning': '69420',
+        },
+      })
+      .then((결과) => {
+        setQuestionList(결과.data.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
+  }, []);
 
   return (
     <Mainbar>
@@ -21,35 +28,26 @@ function AllQuestions() {
         <제목글자>All Questions</제목글자>
         <버튼
           onClick={() => {
-            // /questions/ask 로 바뀔예정
             navigate('/ask');
           }}
         >
           Ask Question
         </버튼>
       </제목버튼묶음>
-      {/* <button
-        onClick={() => {
-          axios
-            .get('https://codingapple1.github.io/shop/data2.json')
-            .then((결과) => {
-              console.log(결과.data);
-            })
-            .catch(() => {
-              console.log('실패함');
-            });
-        }}
-      >
-        데이터 받아오는 버튼
-      </button> */}
-      <질문갯수>{임시질문자료.length} questions</질문갯수>
-      {임시질문자료.map(function (data, index) {
+
+      <질문갯수>{QuestionList.length} questions</질문갯수>
+      {QuestionList.map(function (data, index) {
         return (
           <질문Ul key={index}>
-            {/* 제목누르면 그 글 페이지로 이동하는거 만들예정 */}
-            <질문제목>{data.title}</질문제목>
+            <질문제목
+              onClick={() => {
+                navigate(`/questions/${data.questionId}`);
+              }}
+            >
+              {data.title}
+            </질문제목>
             <질문바디>{data.body}</질문바디>
-            <유저네임>{data.members_id}</유저네임>
+            <유저네임>{data.memberNickName}</유저네임>
           </질문Ul>
         );
       })}
@@ -94,6 +92,7 @@ let 버튼 = styled.button`
   justify-content: center;
   align-items: center;
   color: #fff;
+  cursor: pointer;
 `;
 
 let 질문갯수 = styled.div`
@@ -104,7 +103,8 @@ let 질문갯수 = styled.div`
 `;
 
 let 질문Ul = styled.ul`
-  height: 126.078px;
+  display: flex;
+  flex-direction: column;
   padding: 16px;
   // 질문사이에 선넣기
   border-bottom: 1px solid #e3e6e8;
@@ -115,6 +115,11 @@ let 질문제목 = styled.h3`
   font-size: 17px;
   padding-right: 24px;
   margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
 `;
 
 let 질문바디 = styled.h3`

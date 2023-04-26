@@ -1,94 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
+import AuthInput from '../Components/AuthInput';
+import { addUserId } from '../store';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
-import { ReactComponent as Alert } from '../Assets/icon/alert.svg';
+import { ReactComponent as GoogleLogo } from '../Assets/icon/google-login-icon.svg';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Background = styled.div`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
   background-color: #f1f2f3;
 
+  .container {
+    flex-basis: 288px;
+  }
+
   .logo {
-    margin-bottom: 24px;
+    display: block;
+    margin: 0 auto 24px auto;
   }
 `;
 
-const Container = styled.div`
+const FormContainer = styled.div`
   padding: 24px;
   border-radius: 7px;
   margin-bottom: 40px;
   background-color: #fff;
   box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
     0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 20px;
-
-  label {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: 700;
-  }
-
-  div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    position: relative;
-
-    input {
-      width: 100%;
-      padding: 9px 8px;
-      border: 1px solid #babfc4;
-      border-radius: 3px;
-
-      &:focus {
-        border-color: #59a4de;
-        outline: 4px solid #59a4de3f;
-      }
-    }
-
-    svg {
-      position: absolute;
-      right: 8px;
-    }
-  }
-
-  svg,
-  p {
-    display: none;
-  }
-
-  p {
-    font-size: 12px;
-  }
-
-  &.email.alert-on,
-  &.password.alert-on {
-    input {
-      border-color: #de4f54;
-    }
-
-    input:focus {
-      border-color: #de4f54;
-      outline: 4px solid #de4f543c;
-    }
-
-    svg,
-    p {
-      display: flex;
-    }
-
-    p {
-      color: #de4f54;
-    }
-  }
 `;
 
 const ButtonGroup = styled.div`
@@ -117,6 +61,37 @@ const ButtonGroup = styled.div`
 
 const SignUp = styled.p`
   font-size: 13px;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+    color: #0274cb;
+
+    :hover {
+      color: #0d96ff;
+    }
+  }
+`;
+
+const GoogleOauthButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 1.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0.5rem;
+  margin: 5px 0px;
+  vertical-align: middle;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  text-align: center;
+  color: rgb(65, 63, 63);
+  background-color: #fff;
+  transition: all 0.6s ease;
+  cursor: pointer;
 `;
 
 axios.defaults.withCredentials = true;
@@ -126,6 +101,9 @@ function Login() {
   const [passwordAlert, setPasswordAlert] = useState('');
   const [loginFailed, setLoginFailed] = useState('');
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -133,58 +111,92 @@ function Login() {
     const password = e.target.password.value.trim();
 
     // 공백인 경우 alert 표시
-    setEmailAlert(email === '' ? 'email alert-on' : '');
-    setPasswordAlert(password === '' ? 'password alert-on' : '');
+    setEmailAlert(email === '' && 'Email cannot be empty.');
+    setPasswordAlert(password === '' && 'Password cannot be empty.');
 
     if (email === '' || password === '') return;
 
     // 로그인 처리
     axios
-      .post('', {
-        username: email,
+      .post('http://localhost:3000/login', {
+        // username: email,
+        email,
         password,
       })
       .then((res) => {
-        // 로그인 상태 바꾸기
+        // 로컬스토리지에 access-token 저장
+        localStorage.setItem('access_token', res.data.accessToken);
+        // redux에 유저 아이디 저장
+        dispatch(addUserId(res.data.user.id));
         setLoginFailed('');
+        // 페이지 이동
+        navigate('/questions');
       })
       .catch((err) => {
         setLoginFailed('login-failed');
       });
   };
 
+  // Google Oauth
+  const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  const oAuthURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000&scope=https://www.googleapis.com/auth/userinfo.email`;
+
+  const handleGoogleLogin = () => {
+    window.location.assign(oAuthURL);
+  };
+
+  const search = window.location.search;
+  let authorizationCode;
+
+  if (search) {
+    authorizationCode = search.split('=')[1].split('&')[0];
+  }
+
+  // authorizationCode를 서버로 보내기
+  if (authorizationCode) {
+    console.log(authorizationCode);
+
+    axios
+      .post('', {
+        authorizationCode,
+      })
+      .then((res) => {})
+      .catch((err) => {});
+  }
+
   return (
     <Background>
-      <Logo className="logo" />
-      <Container>
-        <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          <FormGroup className={emailAlert}>
-            <label htmlFor="email">Email</label>
-            <div>
-              <input type="email" size="30" maxLength="100" name="email" />
-              <Alert />
-            </div>
-            <p>Email cannot be empty.</p>
-          </FormGroup>
-          <FormGroup className={passwordAlert}>
-            <label htmlFor="password">Password</label>
-            <div>
-              <input type="password" autoComplete="off" name="password" />
-              <Alert />
-            </div>
-            <p>Password cannot be empty.</p>
-          </FormGroup>
-          <ButtonGroup>
-            <button type="submit">Log in</button>
-            <p className={loginFailed}>Login failed</p>
-          </ButtonGroup>
-        </form>
-      </Container>
-      <SignUp>Don’t have an account? Sign up</SignUp>
+      <div className="container">
+        <Logo className="logo" />
+        <GoogleOauthButton onClick={handleGoogleLogin}>
+          <GoogleLogo />
+          Log in with Google
+        </GoogleOauthButton>
+        <FormContainer>
+          <form onSubmit={handleSubmit}>
+            <AuthInput
+              label="Email"
+              type="email"
+              id="email"
+              alertMessage={emailAlert}
+            />
+            <AuthInput
+              label="Password"
+              type="password"
+              id="password"
+              alertMessage={passwordAlert}
+            />
+
+            <ButtonGroup>
+              <button type="submit">Log in</button>
+              <p className={loginFailed}>Login failed</p>
+            </ButtonGroup>
+          </form>
+        </FormContainer>
+        <SignUp>
+          Don’t have an account? <Link to="/signup">Sign up</Link>
+        </SignUp>
+      </div>
     </Background>
   );
 }
