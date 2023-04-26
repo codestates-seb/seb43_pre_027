@@ -11,6 +11,7 @@ import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.member.entity.Member;
 
+import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
 import seb43_pre_027.demo.utils.UriCreator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION_DEFAULT_URL;
 //memberid pathvariable로 들어가는 부분 jwt에서 claims에 memberid저장된거 꺼내서 memberid로 사용
@@ -29,15 +31,20 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final JwtTokenizer jwtTokenizer;
 
 
-    public MemberController(MemberService memberService, MemberMapper memberMapper) {
+    public MemberController(MemberService memberService,
+                            MemberMapper memberMapper,
+                            JwtTokenizer jwtTokenizer) {
         this.memberService = memberService;
         this.memberMapper = memberMapper;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId,HttpServletRequest request) throws IOException {
+    @GetMapping
+    public ResponseEntity getMember(HttpServletRequest request) throws IOException {
+        Long memberId = getMemberId(request);
         Member verifiedMember = memberService.findVerifiedMember(memberId);
         return new ResponseEntity(verifiedMember,HttpStatus.OK);
     }
@@ -52,9 +59,11 @@ public class MemberController {
     }
 
 
-    @PatchMapping("/{member-id}")
-    public ResponseEntity updateMember(@PathVariable("member-id") @Positive long memberId,
+    @PatchMapping
+    public ResponseEntity updateMember(HttpServletRequest request,
                                        @RequestBody MemberDto.Patch memberPatchDto) {
+        Long memberId = getMemberId(request);
+
         Member member = memberMapper.memberPatchDtoToMember(memberPatchDto);
         member.setMemberId(memberId);
         memberService.updateMember(member);
@@ -62,15 +71,17 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id")
-                                       @Positive long memberId) {
+    @DeleteMapping
+    public ResponseEntity deleteMember(HttpServletRequest request) {
+        Long memberId = getMemberId(request);
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/my-question/{member-id}")
-    public ResponseEntity getMyQuestion(@PathVariable("member-id") long memberId) {
+    @GetMapping("/my-question")
+    public ResponseEntity getMyQuestion(HttpServletRequest request) {
+        Long memberId = getMemberId(request);
+
         Member member = memberService.findVerifiedMember(memberId);
         List<MemberDto.MyQuestionResponseDto> myQuestionResponseDtos = memberMapper.memberToMyQuestionResponseDtos(member);
         return new ResponseEntity(myQuestionResponseDtos, HttpStatus.OK);
@@ -78,11 +89,21 @@ public class MemberController {
 
 
     //구현해야함
-    @GetMapping("my-comment/{member-id}")
-    public ResponseEntity getMyComment(@PathVariable("member-id") long memberId) {
+    @GetMapping("my-comment")
+    public ResponseEntity getMyComment(HttpServletRequest request) {
+        Long memberId = getMemberId(request);
         Member member = memberService.findVerifiedMember(memberId);
         List<MemberDto.MyCommentResponseDto> myCommentResponseDtos = memberMapper.memberToMyCommentResponseDtos(member);
         return new ResponseEntity(myCommentResponseDtos, HttpStatus.OK);
     }
 
+    private Long getMemberId(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        String username = (String) claims.get("username");
+        Member verifiedEmail = memberService.findVerifiedEmail(username);
+        Long memberId = verifiedEmail.getMemberId();
+        return memberId;
+    }
 }

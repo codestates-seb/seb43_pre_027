@@ -75,16 +75,12 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity postQuestionOfMember(HttpServletRequest request,
                                                @Valid @RequestBody QuestionDto.Post requestBody) {
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
-        String username = (String) claims.get("username");
-        log.info("username : {}", username);
-        Member verifiedEmail = memberService.findVerifiedEmail(username);
-        Long memberId = verifiedEmail.getMemberId();
+        Long memberId = getMemberId(request);
+
         requestBody.addMemberId(memberId);
+        Member findMember = memberService.findVerifiedMember(memberId);
         Question question = questionMapper.questionPostDtoToQuestion(requestBody);
-        question.setMember(verifiedEmail);
+        question.setMember(findMember);
         Question createdQuestion =
                 questionService.createQuestion(question, memberId);
         URI location = UriCreator.createUri(QUESTION_DEFAULT_URL, createdQuestion.getQuestionId());
@@ -98,17 +94,14 @@ public class QuestionController {
             HttpServletRequest request,
             @Valid @RequestBody QuestionDto.Patch requestBody) {
         requestBody.setQuestionId(questionId);
-        String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
-        String username = (String) claims.get("username");
-        Member verifiedEmail = memberService.findVerifiedEmail(username);
-        Long memberId = verifiedEmail.getMemberId();
+        Long memberId = getMemberId(request);
         Question question =
                 questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody),memberId);
 
         return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
+
+
     @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(
             @PathVariable("question-id") @Positive long questionId,
@@ -123,6 +116,14 @@ public class QuestionController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
+    
+    private Long getMemberId(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        String username = (String) claims.get("username");
+        Member verifiedEmail = memberService.findVerifiedEmail(username);
+        Long memberId = verifiedEmail.getMemberId();
+        return memberId;
+    }
 }
