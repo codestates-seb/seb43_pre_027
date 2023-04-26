@@ -82,11 +82,10 @@ function SignUp() {
     if (displayName === '' || email === '' || password === '') return;
 
     // 임시
-    navigate('/');
+    // navigate('/');
 
-    /*
     return axios
-      .post('/api/users', {
+      .post('http://localhost:3000/register', {
         displayName,
         email,
         password,
@@ -97,8 +96,8 @@ function SignUp() {
       })
       .catch((err) => {
         // 실패하면 에러 메시지 출력
+        console.log(err);
       });
-    */
   };
 
   return (

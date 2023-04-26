@@ -58,10 +58,22 @@ let 임시질문자료 = createSlice({
   },
 });
 
+const userId = createSlice({
+  name: 'user-id',
+  initialState: 0, // 아이디 타입은 숫자인지 문자인지?
+  reducers: {
+    addUserId: (state, action) => {
+      return action.payload;
+    },
+  },
+});
+
 export default configureStore({
   reducer: {
     임시질문자료: 임시질문자료.reducer,
+    userId: userId.reducer,
   },
 });
 
 export let { addQuestion } = 임시질문자료.actions;
+export const { addUserId } = userId.actions;

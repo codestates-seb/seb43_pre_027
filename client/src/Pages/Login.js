@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
 import AuthInput from '../Components/AuthInput';
+import { addUserId } from '../store';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 
 import { useNavigate, Link } from 'react-router-dom';
@@ -79,6 +81,7 @@ function Login() {
   const [loginFailed, setLoginFailed] = useState('');
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,30 +95,25 @@ function Login() {
 
     if (email === '' || password === '') return;
 
-    // 서버에서 쿠키 생성 (임시)
-    document.cookie = 'token=%1234%; path=/'; // 쿠키 생성
-
-    if (document.cookie) {
-      return navigate('/questions');
-    }
-
     // 로그인 처리
-    /*
     axios
-      .post('', {
-        username: email,
+      .post('http://localhost:3000/login', {
+        // username: email,
+        email,
         password,
       })
       .then((res) => {
-        // 로그인 상태 바꾸기
-        // 상태 코드가 200이나 300이면..? 
+        // 로컬스토리지에 access-token 저장
+        localStorage.setItem('access_token', res.data.accessToken);
+        // redux에 유저 아이디 저장
+        dispatch(addUserId(res.data.user.id));
         setLoginFailed('');
+        // 페이지 이동
         navigate('/questions');
       })
       .catch((err) => {
         setLoginFailed('login-failed');
       });
-    */
   };
 
   return (
