@@ -51,7 +51,16 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())//아래의 CustomConfigurer를 추가해서 커스터마이징된 Configuration을 추가할 수 있음
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.GET, "/member/*").hasRole("ADMIN")     // (3) 추가
+                        .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/members").permitAll()
+                        .antMatchers(HttpMethod.GET, "/member/*").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST, "/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/comments/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/comments/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/comments/**").hasRole("USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
