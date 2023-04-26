@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-icons": "^4.8.0",
+    "redux": "^4.2.1"
+  }
+}
