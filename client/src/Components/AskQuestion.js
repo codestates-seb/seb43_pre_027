@@ -12,30 +12,6 @@ function AskQuestion() {
 
   const [타이틀내용, set타이틀내용] = useState('');
   const [바디내용, set바디내용] = useState('');
-  console.log(String(타이틀내용));
-  console.log(바디내용);
-  // useEffect(() => {
-  //   axios
-  //     .post(
-  //       // 멤버 아이디가 1대신 들어감
-  //       '/questions/1',
-  //       {
-  //         title: '안녕',
-  //         body: '안녕',
-  //       },
-  //       {
-  //         headers: {
-  //           'ngrok-skip-browser-warning': '69420',
-  //         },
-  //       }
-  //     )
-  //     .then((결과) => {
-  //       console.log(결과.data.data);
-  //     })
-  //     .catch(() => {
-  //       console.log('실패함');
-  //     });
-  // }, []);
 
   return (
     <Container>
