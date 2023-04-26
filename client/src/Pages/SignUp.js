@@ -81,18 +81,14 @@ function SignUp() {
 
     if (displayName === '' || email === '' || password === '') return;
 
-    // 임시
-    // navigate('/');
-
     return axios
-      .post('http://localhost:3000/register', {
+      .post('https://ebee-49-143-68-94.ngrok-free.app/members', {
         nickName: displayName,
         email,
         password,
       })
       .then((res) => {
         // 성공하면 로그인 페이지로 이동
-        console.log(res);
         navigate('/');
       })
       .catch((err) => {

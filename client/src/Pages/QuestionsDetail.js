@@ -22,34 +22,10 @@ const Container = styled.div`
 `;
 
 function QuestionsDetail() {
-  const [addAnswer, setAddAnswer] = useState([]); //
-
-  // useEffect(() => {
-  //   axios
-  //     .post(
-  //       // 멤버 아이디가 1대신 들어감
-  //       // 뒤에꺼는 질문게시물 id
-  //       '/comments/1/1',
-  //       {
-  //         body: '댓글',
-  //       },
-  //       {
-  //         headers: {
-  //           'ngrok-skip-browser-warning': '69420',
-  //         },
-  //       }
-  //     )
-  //     .then((결과) => {
-  //       console.log(결과.data.data);
-  //     })
-  //     .catch(() => {
-  //       console.log('실패함');
-  //     });
-  // }, []);
+  const [addAnswer, setAddAnswer] = useState([]);
 
   // 질문 받아오는 state
   let [questionData, setQuestionData] = useState({});
-  questionData.title;
   useEffect(() => {
     axios
       .get(

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const AnswerWrapper = styled.div`
   width: auto;
@@ -60,6 +61,26 @@ function AnswerCreate({ addAnswer, setAddAnswer }) {
 
     setAnswer('');
     inputRef.current.focus();
+
+    // 댓글 추가하기 요청
+    axios
+      .post(
+        // 멤버 아이디가 1대신 들어감
+        // 뒤에꺼는 질문게시물 id
+        '/comments/1/1',
+        { body: answer },
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      .then((결과) => {
+        console.log(결과.data.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
   };
 
   return (

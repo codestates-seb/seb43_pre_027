@@ -70,21 +70,10 @@ function Logout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // 로그아웃 처리(임시)
-    // 로컬스토리지 지우기
+    // 로컬스토리지 비우기
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     navigate('/');
-
-    /*
-    return axios
-      .post('')
-      .then((res) => {
-        // 로그인 상태 변경 (false)
-      })
-      .catch((err) => {
-        alert(err);
-      });
-    */
   };
 
   const handleCancel = () => {

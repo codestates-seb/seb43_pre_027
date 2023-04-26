@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
 import AuthInput from '../Components/AuthInput';
-import { addUserId } from '../store';
+// import { addUserId } from '../store';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 import { ReactComponent as GoogleLogo } from '../Assets/icon/google-login-icon.svg';
 import { useNavigate, Link } from 'react-router-dom';
@@ -118,21 +118,25 @@ function Login() {
 
     // 로그인 처리
     axios
-      .post('http://localhost:3000/login', {
-        // username: email,
-        email,
+      .post('https://ebee-49-143-68-94.ngrok-free.app/auth/login', {
+        username: email,
         password,
       })
       .then((res) => {
-        // 로컬스토리지에 access-token 저장
-        localStorage.setItem('access_token', res.data.accessToken);
-        // redux에 유저 아이디 저장
-        dispatch(addUserId(res.data.user.id));
+        console.log(res);
+        // 로컬스토리지에 access-token, refresh token 저장
+        // value가 undefined면 안됨
+        localStorage.setItem('access_token', res.headers.authorization);
+        localStorage.setItem('refresh_token', res.headers.refresh);
+        // redux에 유저 아이디 저장 -> X
+        // dispatch(addUserId(res.data.user.id));
         setLoginFailed('');
         // 페이지 이동
         navigate('/questions');
       })
       .catch((err) => {
+        // 401 에러 : setLoginFailed로 로그인 실패 문구 띄우기
+        console.log(err);
         setLoginFailed('login-failed');
       });
   };

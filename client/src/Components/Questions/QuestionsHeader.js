@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import dummy from '../../data.json';
 
 const QuestionHeader = styled.div`
   flex-flow: row nowrap;
@@ -34,6 +33,8 @@ const AskButton = styled.div`
 
 const QuestionInfo = styled.div`
   display: flex;
+  // (수정함)
+  justify-content: space-between;
   padding-bottom: calc(8px * 1);
   margin-bottom: calc(16px * 1);
   flex-wrap: wrap;
@@ -52,7 +53,7 @@ const TimeLine = styled.div`
   }
 `;
 
-function QuestionsHeader() {
+function QuestionsHeader({ title, nickName }) {
   const handleAskQuestion = () => {
     // 질문하기 경로 입력
   };
@@ -60,9 +61,7 @@ function QuestionsHeader() {
     <QuestionHeader>
       <QuestionTitle>
         {/* 질문의 제목 영역 */}
-        {dummy.questions.map((questions) => (
-          <h1 key={questions.title}>{questions.title}</h1>
-        ))}
+        <h1>{title}</h1>
         <AskButton>
           {/* 질문하기 버튼 클릭 시, 질문하기 페이지로 이동 */}
           <button onClick={handleAskQuestion}>Ask Question</button>
@@ -73,6 +72,8 @@ function QuestionsHeader() {
           <span>Asked</span>
           <span>today{/* 게시글 작성 시간 */}</span>
         </TimeLine>
+        {/* (수정함) */}
+        <strong>{nickName}</strong>
       </QuestionInfo>
     </QuestionHeader>
   );

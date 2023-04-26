@@ -54,17 +54,17 @@ const router = createBrowserRouter([
         <Common />
       </>
     ),
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/questions/:id',
     element: <QuestionsDetail />,
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/ask',
     element: <Ask />,
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/userinfo',

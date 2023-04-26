@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import dummy from '../../data.json';
 
 const QuestionLayout = styled.div`
   display: grid;
@@ -76,7 +75,7 @@ const QuestionBody = styled.div`
   margin-top: 0;
 `;
 
-function QuestionsBody() {
+function QuestionsBody({ body }) {
   const [questionScore, setQuestionScore] = useState(0);
   const handleUpVote = () => {
     setQuestionScore(questionScore + 1);
@@ -121,11 +120,9 @@ function QuestionsBody() {
         </VoteGroupDown>
       </LayoutLeft>
       <LayoutRigth>
-        <QuestionBody>
+        <QuestionBody className="body">
           {/* 질문 본문 내용 */}
-          {dummy.questions.map((questions) => (
-            <li key={questions.body}>{questions.body}</li>
-          ))}
+          <p>{body}</p>
         </QuestionBody>
       </LayoutRigth>
     </QuestionLayout>
