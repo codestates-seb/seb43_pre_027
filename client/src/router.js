@@ -9,9 +9,25 @@ import Common from './Components/Common';
 import Header from './Components/Header';
 import NotFound from './Pages/test-NotFound';
 
-const auth = () => {};
+const auth = () => {
+  const value = localStorage.getItem('access_token');
 
-const loggedIn = () => {};
+  if (!value) {
+    return redirect('/');
+  }
+
+  return null;
+};
+
+const loggedIn = () => {
+  const value = localStorage.getItem('access_token');
+
+  if (value) {
+    return redirect('/questions');
+  }
+
+  return null;
+};
 
 const router = createBrowserRouter([
   {

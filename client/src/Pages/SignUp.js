@@ -81,8 +81,11 @@ function SignUp() {
 
     if (displayName === '' || email === '' || password === '') return;
 
+    // 임시
+    // navigate('/');
+
     return axios
-      .post('', {
+      .post('http://localhost:3000/register', {
         nickName: displayName,
         email,
         password,
@@ -94,7 +97,6 @@ function SignUp() {
       })
       .catch((err) => {
         // 실패하면 에러 메시지 출력
-        // 중복 이메일 에러 처리
         console.log(err);
       });
   };

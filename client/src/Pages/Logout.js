@@ -1,7 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-
-import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
   display: flex;
@@ -71,6 +70,11 @@ function Logout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // 로그아웃 처리(임시)
+    // 로컬스토리지 지우기
+    localStorage.removeItem('access_token');
+    navigate('/');
+
     /*
     return axios
       .post('')
