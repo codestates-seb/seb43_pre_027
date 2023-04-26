@@ -3,17 +3,30 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+axios.defaults.withCredentials = true;
 function AllQuestions() {
   let navigate = useNavigate();
-  let 임시질문자료 = useSelector((state) => {
-    return state.임시질문자료;
-  });
-
+  let [QuestionList, setQuestionList] = useState([]);
   // 나중에 useEffect로 데이터 뜨게하면 될듯
-  // useEffect(()=>{
-  // 코드 자리
+  // id순서대로 넣기
+  // QuestionList.find((a)=>{
+  //   a.id == id
   // })
+  useEffect(() => {
+    axios
+      .get('/questions/all-questions', {
+        headers: {
+          'ngrok-skip-browser-warning': '69420',
+        },
+      })
+      .then((결과) => {
+        console.log(결과.data.data);
+        setQuestionList(결과.data.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
+  }, []);
 
   return (
     <Mainbar>
@@ -21,35 +34,23 @@ function AllQuestions() {
         <제목글자>All Questions</제목글자>
         <버튼
           onClick={() => {
-            // /questions/ask 로 바뀔예정
+            // /ask 로 바뀔예정
             navigate('/ask');
           }}
         >
           Ask Question
         </버튼>
       </제목버튼묶음>
-      {/* <button
-        onClick={() => {
-          axios
-            .get('https://codingapple1.github.io/shop/data2.json')
-            .then((결과) => {
-              console.log(결과.data);
-            })
-            .catch(() => {
-              console.log('실패함');
-            });
-        }}
-      >
-        데이터 받아오는 버튼
-      </button> */}
-      <질문갯수>{임시질문자료.length} questions</질문갯수>
-      {임시질문자료.map(function (data, index) {
+
+      <질문갯수>{QuestionList.length} questions</질문갯수>
+      {QuestionList.map(function (data, index) {
         return (
           <질문Ul key={index}>
             {/* 제목누르면 그 글 페이지로 이동하는거 만들예정 */}
+            {/* data를 QuestionList로 바꾸어 주면된다. */}
             <질문제목>{data.title}</질문제목>
             <질문바디>{data.body}</질문바디>
-            <유저네임>{data.members_id}</유저네임>
+            <유저네임>{data.memberNickName}</유저네임>
           </질문Ul>
         );
       })}

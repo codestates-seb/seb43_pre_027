@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import QuestionsHeader from '../Components/Questions/QuestionsHeader';
 import QuestionsBody from '../Components/Questions/QuestionsBody';
 import AnswerList from '../Components/Answer/AnswerList';
 import AnswerCreate from '../Components/Answer/AnswerCreate';
+import axios from 'axios';
 
 const Container = styled.div`
   max-width: 1100px;
@@ -21,15 +22,70 @@ const Container = styled.div`
 `;
 
 function QuestionsDetail() {
-  const [addAnswer, setAddAnswer] = useState([]); //answeritem을 담을 리스트 생성
+  const [addAnswer, setAddAnswer] = useState([]); //
+
+  // useEffect(() => {
+  //   axios
+  //     .post(
+  //       // 멤버 아이디가 1대신 들어감
+  //       // 뒤에꺼는 질문게시물 id
+  //       '/comments/1/1',
+  //       {
+  //         body: '댓글',
+  //       },
+  //       {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': '69420',
+  //         },
+  //       }
+  //     )
+  //     .then((결과) => {
+  //       console.log(결과.data.data);
+  //     })
+  //     .catch(() => {
+  //       console.log('실패함');
+  //     });
+  // }, []);
+
+  // 질문 받아오는 state
+  let [questionData, setQuestionData] = useState({});
+  questionData.title;
+  useEffect(() => {
+    axios
+      .get(
+        // 멤버 아이디가 1대신 들어감
+        '/questions/1',
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      .then((결과) => {
+        console.log(결과.data);
+        setQuestionData(결과.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
+  }, []);
+
+  //answeritem을 담을 리스트 생성
   return (
     <Container>
       {/* 질문 상세페이지 헤더 */}
-      <QuestionsHeader />
+      <QuestionsHeader
+        title={questionData.title}
+        nickName={questionData.nickName}
+      />
       {/* 질문 상세페이지 본문 */}
-      <QuestionsBody />
+      <QuestionsBody body={questionData.body} />
       {/* 질문 상세페이지 답변 목록 */}
-      <AnswerList addAnswer={addAnswer} setAddAnswer={setAddAnswer} />
+      <AnswerList
+        addAnswer={addAnswer}
+        setAddAnswer={setAddAnswer}
+        commentBodys={questionData.commentBodys}
+      />
       {/* 질문 상세페이지 답변하기 */}
       <AnswerCreate addAnswer={addAnswer} setAddAnswer={setAddAnswer} />
     </Container>

@@ -27,7 +27,7 @@ const AnswerBodys = styled.div`
   }
 `;
 
-const AnswerList = ({ addAnswer, setAddAnswer }) => {
+const AnswerList = ({ addAnswer, setAddAnswer, commentBodys }) => {
   return (
     <AnswerContainer>
       <AnswerHeader>
@@ -35,13 +35,13 @@ const AnswerList = ({ addAnswer, setAddAnswer }) => {
       </AnswerHeader>
       <AnswerBodys>
         <ul>
-          {addAnswer && // answerList가 있을때만 출력
-            addAnswer.map((answerItem) => {
+          {commentBodys && // answerList가 있을때만 출력
+            commentBodys.map((answerItem) => {
               if (answerItem.deleted) return null;
               return (
                 <AnswerItem
                   key={answerItem.id}
-                  answerItem={answerItem}
+                  answerItem={answerItem.commentBody}
                   addAnswer={addAnswer}
                   setAddAnswer={setAddAnswer}
                 />

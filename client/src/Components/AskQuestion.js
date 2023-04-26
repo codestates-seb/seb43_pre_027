@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addQuestion } from './../store.js';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function AskQuestion() {
   const dispatch = useDispatch();
@@ -16,8 +17,31 @@ function AskQuestion() {
     id: 3,
     title: 타이틀내용,
     body: 바디내용,
-    members_id: '김제발',
+    memberNickName: '김제발',
   };
+
+  useEffect(() => {
+    axios
+      .post(
+        // 멤버 아이디가 1대신 들어감
+        '/questions/3',
+        {
+          title: '안녕',
+          body: '안녕',
+        },
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      .then((결과) => {
+        console.log(결과.data.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
+  }, []);
 
   return (
     <Container>

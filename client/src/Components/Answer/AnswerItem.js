@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import axios from 'axios';
 import React, { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -165,6 +166,25 @@ function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
 
   const onClickEditButton = () => {
     setEdited(true);
+    axios
+      .patch(
+        // comments뒤에는 member-id/댓글id
+        '/comments/1/2',
+        {
+          body: newAnswer,
+        },
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      .then((결과) => {
+        console.log(결과.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
   };
 
   const editInputRef = useRef(null);
@@ -177,6 +197,22 @@ function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
       }));
       setAddAnswer(nextAnswerList);
     }
+    axios
+      .delete(
+        // comments뒤에는 member-id/댓글id
+        '/comments/1/1',
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      .then((결과) => {
+        console.log(결과.data);
+      })
+      .catch(() => {
+        console.log('실패함');
+      });
   };
 
   return (
@@ -213,7 +249,7 @@ function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
         </VoteGroupDown>
       </LayoutLeft>
       <LayoutRigth>
-        <AnswerBody>{answerItem.answer}</AnswerBody>
+        <AnswerBody>{answerItem}</AnswerBody>
         <AnswerInfo>
           <AnswerDelete>
             <button type="button" onClick={onClickDeletButton}>
