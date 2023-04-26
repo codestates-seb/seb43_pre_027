@@ -67,7 +67,7 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("https://1f13-49-143-68-94.ngrok-free.app");
+        configuration.addAllowedOrigin("https://ebee-49-143-68-94.ngrok-free.app");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");

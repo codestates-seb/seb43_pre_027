@@ -21,13 +21,16 @@ import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.mapper.QuestionMapper;
 import seb43_pre_027.demo.question.service.QuestionService;
+import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
 import seb43_pre_027.demo.utils.UriCreator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,12 +42,15 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
     private final MemberService memberService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public QuestionController(QuestionService questionService, QuestionMapper questionMapper, MemberService memberService) {
+    public QuestionController(QuestionService questionService, QuestionMapper questionMapper, MemberService memberService, JwtTokenizer jwtTokenizer) {
         this.questionService = questionService;
         this.questionMapper = questionMapper;
         this.memberService = memberService;
+        this.jwtTokenizer = jwtTokenizer;
     }
+
     @GetMapping("/create")
     public ResponseEntity createQuestion(){
         questionService.testMockCreate();
@@ -80,14 +86,19 @@ public class QuestionController {
 
         return ResponseEntity.created(location).build();
     }
-
-    @PatchMapping("/{member-id}/{question-id}")
+////////////////////////변경한 부분
+    @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestionOfMember(
             @PathVariable("question-id") @Positive long questionId,
-            @PathVariable("member-id") @Positive long memberId,
+            HttpServletRequest request,
             @Valid @RequestBody QuestionDto.Patch requestBody) {
         requestBody.setQuestionId(questionId);
-
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+        String username = (String) claims.get("username");
+        Member verifiedEmail = memberService.findVerifiedEmail(username);
+        Long memberId = verifiedEmail.getMemberId();
         Question question =
                 questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(requestBody),memberId);
 
