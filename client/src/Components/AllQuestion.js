@@ -150,7 +150,7 @@ function AllQuestions() {
       .catch(() => {
         console.log('실패함');
       });
-  });
+  }, []);
 
   return (
     <Mainbar>
