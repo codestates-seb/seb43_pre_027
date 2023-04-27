@@ -73,14 +73,6 @@ const HeaderContainer = styled.header`
 const Header = () => {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate('/login');
-  };
-
-  const handleSignup = () => {
-    navigate('/signup');
-  };
-
   return (
     <HeaderContainer>
       <div className="header-container">
