@@ -2,6 +2,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const AnswerWrapper = styled.div`
   width: auto;
@@ -47,6 +48,7 @@ const AnswerSubmit = styled.div`
 function AnswerCreate({ addAnswer, setAddAnswer }) {
   const [answer, setAnswer] = useState('');
   const inputRef = useRef(null);
+  const { id } = useParams();
   const onChangeInput = (e) => {
     setAnswer(e.target.value);
   };
@@ -62,16 +64,18 @@ function AnswerCreate({ addAnswer, setAddAnswer }) {
     setAnswer('');
     inputRef.current.focus();
 
+    let token = localStorage.getItem('access_token');
+
     // 댓글 추가하기 요청
     axios
       .post(
         // 멤버 아이디가 1대신 들어감
         // 뒤에꺼는 질문게시물 id
-        '/comments/1/1',
+        '/comments/' + id,
         { body: answer },
         {
           headers: {
-            'ngrok-skip-browser-warning': '69420',
+            Authorization: token,
           },
         }
       )

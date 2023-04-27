@@ -140,6 +140,7 @@ let 유저네임 = styled.div`
 function AllQuestions() {
   let navigate = useNavigate();
   let [QuestionList, setQuestionList] = useState([]);
+
   useEffect(() => {
     axios
       .get('/questions/all-questions')
@@ -149,7 +150,7 @@ function AllQuestions() {
       .catch(() => {
         console.log('실패함');
       });
-  }, []);
+  });
 
   return (
     <Mainbar>

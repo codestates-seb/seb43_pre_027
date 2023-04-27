@@ -2,13 +2,12 @@ import { createBrowserRouter, redirect } from 'react-router-dom';
 import Login from './Pages/Login';
 import Logout from './Pages/Logout';
 import SignUp from './Pages/SignUp';
-import UserInfo from './Pages/test-UserInfo';
 import QuestionsDetail from './Pages/QuestionsDetail';
 import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
-import Header from './Components/Header';
 import NotFound from './Pages/NotFound';
 import QuestionEdite from './Pages/QuestionEdite';
+import UserProfile from './Components/UserProfile';
 
 const auth = () => {
   const value = localStorage.getItem('access_token');
@@ -56,7 +55,6 @@ const router = createBrowserRouter([
     path: '/questions/:id',
     element: <QuestionsDetail />,
     loader: auth,
-    // children: [{ path: 'edite', element: <QuestionEdite />, loader: auth }],
   },
   {
     path: '/questions/:id/edite',
@@ -69,8 +67,8 @@ const router = createBrowserRouter([
     loader: auth,
   },
   {
-    path: '/userinfo',
-    element: <UserInfo />,
+    path: '/userprofile',
+    element: <UserProfile />,
     loader: auth,
   },
 ]);

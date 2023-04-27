@@ -185,9 +185,6 @@ function AskQuestion() {
                 },
               }
             )
-            .then((결과) => {
-              console.log(결과.data.data);
-            })
             .catch(() => {
               console.log('실패함');
             });
