@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://seb43-pre27.cx1cusmt4caw.ap-northeast-2.rds.amazonaws.com:${MYSQLPORT}/pre27?serverTimezone=Asia/Seoul
+    username: ${MYSQLID}
+    password: ${PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update  # (1) 스키마 자동 생성
+    show-sql: true      # (2) SQL 쿼리 출력
+    properties:
+      hibernate:
+        format_sql: true  # (3) SQL pretty print
+server:
+  servlet:
+    encoding:
+      force-response: true
+mail:
+  address:
+    admin: ${ADMIN}
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420

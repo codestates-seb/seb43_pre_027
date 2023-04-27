@@ -16,19 +16,19 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Member extends Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
-    @Column(nullable = false)
+    @Column
     private String nickName;
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
-    @Column(nullable = false)
+
+    @Column
     private String location = "";
 
     @OneToMany(mappedBy = "member")
@@ -37,9 +37,16 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private Member.MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
+
+    public Member(String email) {
+        this.email = email;
+    }
 
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중"),

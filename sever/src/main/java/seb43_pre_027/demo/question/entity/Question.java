@@ -27,9 +27,6 @@ public class Question extends Auditable {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String body;
 
-    @Column
-    private int likeCount;
-
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_REGISTERED;
@@ -44,7 +41,8 @@ public class Question extends Auditable {
             this.member.getQuestions().add(this);
         }
     }
-    @OneToMany(mappedBy = "question")
+
+    @OneToMany(mappedBy = "question",cascade = { CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments = new ArrayList<>();
 
     public enum QuestionStatus {
