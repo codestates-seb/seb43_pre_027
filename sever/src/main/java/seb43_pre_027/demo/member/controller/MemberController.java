@@ -40,7 +40,8 @@ public class MemberController {
     public ResponseEntity getMember(HttpServletRequest request) throws IOException {
         Long memberId = getMemberId(request);
         Member verifiedMember = memberService.findVerifiedMember(memberId);
-        return new ResponseEntity(verifiedMember,HttpStatus.OK);
+        MemberDto.myPageResponseDto my =new MemberDto.myPageResponseDto(verifiedMember.getNickName(),verifiedMember.getLocation());
+        return new ResponseEntity(my,HttpStatus.OK);
     }
 
     @PostMapping
