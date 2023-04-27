@@ -97,7 +97,7 @@ function SignUp() {
     if (displayName === '' || email === '' || password === '') return;
 
     return axios
-      .post('/members', {
+      .post('http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/members', {
         nickName: displayName,
         email,
         password,

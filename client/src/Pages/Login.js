@@ -119,7 +119,7 @@ function Login() {
 
     // 로그인 처리
     axios
-      .post('/auth/login', {
+      .post('http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/auth/login', {
         username: email,
         password,
       })
