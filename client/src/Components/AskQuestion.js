@@ -9,10 +9,10 @@ function AskQuestion() {
   const dispatch = useDispatch();
   let navigate = useNavigate();
   // 값 만들때마다 새로운 id로 만들어지게하고
-
+  let token = localStorage.getItem('access_token');
   const [타이틀내용, set타이틀내용] = useState('');
   const [바디내용, set바디내용] = useState('');
-
+  console.log(token);
   return (
     <Container>
       <제목>
@@ -66,15 +66,10 @@ function AskQuestion() {
       </TitleBox>
       <Title버튼
         onClick={() => {
-          if (바디내용.length >= 20 && 타이틀내용.length >= 5) {
-            set타이틀내용('');
-            set바디내용('');
-            navigate('/ask');
-          }
           axios
             .post(
               // 멤버 아이디가 1대신 들어감
-              '/questions/1',
+              '/questions',
               {
                 title: 타이틀내용,
                 body: 바디내용,
@@ -82,6 +77,7 @@ function AskQuestion() {
               {
                 headers: {
                   'ngrok-skip-browser-warning': '69420',
+                  Authorization: token,
                 },
               }
             )
@@ -91,6 +87,11 @@ function AskQuestion() {
             .catch(() => {
               console.log('실패함');
             });
+          if (바디내용.length >= 20 && 타이틀내용.length >= 5) {
+            set타이틀내용('');
+            set바디내용('');
+            navigate('/questions');
+          }
         }}
       >
         Post your question

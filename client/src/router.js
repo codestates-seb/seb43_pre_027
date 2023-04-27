@@ -49,22 +49,22 @@ const router = createBrowserRouter([
   {
     path: '/questions',
     element: <Questions />,
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/questions/:id',
     element: <QuestionsDetail />,
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/ask',
     element: <Ask />,
-    // loader: auth,
+    loader: auth,
   },
   {
     path: '/userinfo',
     element: <UserInfo />,
-    // loader: auth,
+    loader: auth,
   },
 ]);
 

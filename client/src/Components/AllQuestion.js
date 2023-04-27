@@ -83,8 +83,8 @@ let 제목글자 = styled.div`
 `;
 
 let 버튼 = styled.button`
-  background-color: #0274cc;
-  border-radius: 5px;
+  background-color: #2f95e2;
+  border-radius: 8px;
   padding: 0.8em 1.2em 0.8em 1em;
   transition: all ease-in-out 0.2s;
   font-size: 16px;
@@ -93,6 +93,9 @@ let 버튼 = styled.button`
   align-items: center;
   color: #fff;
   cursor: pointer;
+  :hover {
+    background: #0274cc;
+  }
 `;
 
 let 질문갯수 = styled.div`
