@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import AuthInput from '../Components/AuthInput';
-// import { addUserId } from '../store';
 import { ReactComponent as Logo } from '../Assets/login-logo.svg';
 import { ReactComponent as GoogleLogo } from '../Assets/icon/google-login-icon.svg';
 import { useNavigate, Link } from 'react-router-dom';
@@ -45,6 +43,10 @@ const ButtonGroup = styled.div`
     color: #ffffff;
     background-color: #0a95ff;
     cursor: pointer;
+
+    :hover {
+      background-color: #0b74c5;
+    }
   }
 
   p {
@@ -102,7 +104,6 @@ function Login() {
   const [loginFailed, setLoginFailed] = useState('');
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -118,25 +119,20 @@ function Login() {
 
     // 로그인 처리
     axios
-      .post('https://ebee-49-143-68-94.ngrok-free.app/auth/login', {
-        username: email,
-        password,
-      })
+      .post(
+        'http://ec2-43-201-109-241.ap-northeast-2.compute.amazonaws.com/auth/login',
+        {
+          username: email,
+          password,
+        }
+      )
       .then((res) => {
-        console.log(res);
-        // 로컬스토리지에 access-token, refresh token 저장
-        // value가 undefined면 안됨
         localStorage.setItem('access_token', res.headers.authorization);
         localStorage.setItem('refresh_token', res.headers.refresh);
-        // redux에 유저 아이디 저장 -> X
-        // dispatch(addUserId(res.data.user.id));
         setLoginFailed('');
-        // 페이지 이동
         navigate('/questions');
       })
-      .catch((err) => {
-        // 401 에러 : setLoginFailed로 로그인 실패 문구 띄우기
-        console.log(err);
+      .catch(() => {
         setLoginFailed('login-failed');
       });
   };
@@ -158,8 +154,6 @@ function Login() {
 
   // authorizationCode를 서버로 보내기
   if (authorizationCode) {
-    console.log(authorizationCode);
-
     axios
       .post('', {
         authorizationCode,

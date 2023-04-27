@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 
 const Background = styled.div`
   display: flex;
