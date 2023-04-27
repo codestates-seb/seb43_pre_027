@@ -1,11 +1,9 @@
 import styled from 'styled-components';
-import { reset } from 'styled-reset';
 import React from 'react';
-import GlobalStyles from '../Theme/GlobalStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from './Search';
-import { useSelector } from 'react-redux';
-import sprites from '../Images/Sprites.svg';
+import sprites from '../Assets/icon/Sprites.svg';
+import UtilMenu from './UtilMenu';
 
 export const CommonButton = styled.button`
   background-color: ${(props) => props.bgColor || 'hsl(205, 46%, 92%)'};
@@ -89,10 +87,7 @@ const Header = () => {
           <li>For Teams</li>
         </ul>
         <Search />
-        <CommonButton border="#799ac7">Login</CommonButton>
-        <CommonButton bgColor="#0a94ff" color="#fff" border="transparent">
-          Sign up
-        </CommonButton>
+        <UtilMenu />
       </div>
     </HeaderContainer>
   );

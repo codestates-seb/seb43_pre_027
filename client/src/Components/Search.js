@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { ReactComponent as SearchIcon } from '../Images/searchIcon.svg';
+import { ReactComponent as SearchIcon } from '../Assets/icon/SearchIcon.svg';
+import { search } from './SearchSlice';
 
 const SearchContainer = styled.form`
   position: relative;
@@ -33,15 +34,32 @@ const SearchBar = styled.input`
 `;
 
 const Search = () => {
+  const [searchVal, setSearchVal] = useState('');
+
+  const dispatch = useDispatch();
+
+  const onChangeSearch = (e) => {
+    setSearchVal(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(search(searchVal));
+  };
+
   return (
-    <SearchContainer>
+    <SearchContainer onSubmit={onSubmit}>
       <SearchIcon
         id="search-icon"
         width="18px"
         height="18px"
         fill="hsl(210,8%,55%)"
       />
-      <SearchBar placeholder="Search..." />
+      <SearchBar
+        onChange={onChangeSearch}
+        value={searchVal}
+        placeholder="Search..."
+      />
     </SearchContainer>
   );
 };

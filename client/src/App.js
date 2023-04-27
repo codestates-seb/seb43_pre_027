@@ -1,18 +1,13 @@
-import { createGlobalStyle } from 'styled-components';
-import { reset } from 'styled-reset';
-
-const GlobalStyles = createGlobalStyle`
-  ${reset}
-    body {
-        background-color: white;
-    }
-`;
+import { RouterProvider } from 'react-router-dom';
+import GlobalStyles from './Theme/GlobalStyles';
+import router from './router';
 
 function App() {
   return (
-    <div>
+    <>
       <GlobalStyles />
-    </div>
+      <RouterProvider router={router} />
+    </>
   );
 }
 

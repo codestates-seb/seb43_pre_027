@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as QuestionIcon } from '../Images/QuestionIcon.svg';
+import { ReactComponent as QuestionIcon } from '../Assets/icon/QuestionIcon.svg';
 
 const NavContainer = styled.nav`
   width: 100%;
