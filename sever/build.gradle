@@ -40,6 +40,9 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.9.0'
 	//configuration-processor
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	//mysql-connector
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 
 }
 
