@@ -8,6 +8,7 @@ import Ask from './Pages/Ask';
 import Questions from './Pages/Questions';
 import Header from './Components/Header';
 import NotFound from './Pages/NotFound';
+import QuestionEdite from './Pages/QuestionEdite';
 
 const auth = () => {
   const value = localStorage.getItem('access_token');
@@ -54,6 +55,12 @@ const router = createBrowserRouter([
   {
     path: '/questions/:id',
     element: <QuestionsDetail />,
+    loader: auth,
+    // children: [{ path: 'edite', element: <QuestionEdite />, loader: auth }],
+  },
+  {
+    path: '/questions/:id/edite',
+    element: <QuestionEdite />,
     loader: auth,
   },
   {

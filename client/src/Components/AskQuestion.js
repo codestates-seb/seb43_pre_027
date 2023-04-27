@@ -181,7 +181,6 @@ function AskQuestion() {
               },
               {
                 headers: {
-                  'ngrok-skip-browser-warning': '69420',
                   Authorization: token,
                 },
               }

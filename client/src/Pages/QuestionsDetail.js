@@ -8,6 +8,7 @@ import axios from 'axios';
 import Header from '../Components/Header';
 import Footer from '../Components/Footer';
 import Nav from '../Components/Nav';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1100px;
@@ -86,20 +87,16 @@ const RightAside = styled.aside`
 
 function QuestionsDetail() {
   const [addAnswer, setAddAnswer] = useState([]);
-
-  // 질문 받아오는 state
+  let { id } = useParams();
   let [questionData, setQuestionData] = useState({});
+  let navigator = useNavigate();
   useEffect(() => {
     axios
-      .get(
-        // 멤버 아이디가 1대신 들어감
-        '/questions/1',
-        {
-          headers: {
-            'ngrok-skip-browser-warning': '69420',
-          },
-        }
-      )
+      .get('/questions/' + id, {
+        headers: {
+          'ngrok-skip-browser-warning': '69420',
+        },
+      })
       .then((결과) => {
         console.log(결과.data);
         setQuestionData(결과.data);
@@ -124,9 +121,17 @@ function QuestionsDetail() {
             title={questionData.title}
             nickName={questionData.nickName}
           />
+
           {/* 질문 상세페이지 본문 */}
           <QuestionsBody body={questionData.body} />
           {/* 질문 상세페이지 답변 목록 */}
+          <button
+            onClick={() => {
+              navigator('edite');
+            }}
+          >
+            수정하기
+          </button>
           <AnswerList
             addAnswer={addAnswer}
             setAddAnswer={setAddAnswer}
@@ -135,6 +140,7 @@ function QuestionsDetail() {
           {/* 질문 상세페이지 답변하기 */}
           <AnswerCreate addAnswer={addAnswer} setAddAnswer={setAddAnswer} />
         </Container>
+
         <RightAside>
           <ul>
             <li className="widget-header">The Overflow Blog</li>

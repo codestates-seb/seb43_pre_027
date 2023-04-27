@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const QuestionHeader = styled.div`
   flex-flow: row nowrap;
@@ -82,8 +83,8 @@ function QuestionsHeader({ title, nickName }) {
       <QuestionInfo>
         <TimeLine>
           <span>Asked</span>
-          <strong>today{/* 게시글 작성 시간 */}</strong>
-          {/* (수정함) */}
+          <strong>today</strong>
+          <span>Questioner</span>
           <strong>{nickName}</strong>
         </TimeLine>
       </QuestionInfo>

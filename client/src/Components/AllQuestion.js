@@ -142,11 +142,7 @@ function AllQuestions() {
   let [QuestionList, setQuestionList] = useState([]);
   useEffect(() => {
     axios
-      .get('/questions/all-questions', {
-        headers: {
-          'ngrok-skip-browser-warning': '69420',
-        },
-      })
+      .get('/questions/all-questions')
       .then((결과) => {
         setQuestionList(결과.data.data);
       })
