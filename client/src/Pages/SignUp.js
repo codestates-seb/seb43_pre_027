@@ -1,10 +1,9 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Overview from '../Components/Overview';
 import AuthInput from '../Components/AuthInput';
-
-import { Link, useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
   display: flex;
@@ -98,16 +97,19 @@ function SignUp() {
     if (displayName === '' || email === '' || password === '') return;
 
     return axios
-      .post('https://ebee-49-143-68-94.ngrok-free.app/members', {
-        nickName: displayName,
-        email,
-        password,
-      })
-      .then((res) => {
+      .post(
+        'http://ec2-43-201-109-241.ap-northeast-2.compute.amazonaws.com/members',
+        {
+          nickName: displayName,
+          email,
+          password,
+        }
+      )
+      .then(() => {
         // 성공하면 로그인 페이지로 이동
         navigate('/');
       })
-      .catch((err) => {
+      .catch(() => {
         // 실패하면 에러 메시지 출력
         setSignupFailed('signup-failed');
       });
