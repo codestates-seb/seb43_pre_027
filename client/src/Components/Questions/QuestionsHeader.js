@@ -9,22 +9,30 @@ const QuestionHeader = styled.div`
 
 const QuestionTitle = styled.div`
   display: flex;
+  justify-content: space-between;
   h1 {
     overflow-wrap: break-word;
     font-size: 2.07692308rem;
     margin-bottom: calc(8px * 1);
     flex: 1 auto;
     line-height: 1.3;
-    margin: 0 0 1em;
+    color: hsl(210, 8%, 25%);
   }
 `;
 
 const AskButton = styled.div`
+  display: inline-block;
+  margin-top: 5px;
+  position: relative;
   button {
     background-color: rgb(0, 162, 255);
     border-color: rgb(0, 162, 255);
     color: white;
+    width: 100%;
     padding: 10px 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.4);
   }
 `;
 
@@ -46,6 +54,9 @@ const TimeLine = styled.div`
   margin-right: calc(16px * 1);
   span {
     color: hsl(210, 8%, 45%);
+    margin-right: calc(8px * 1);
+  }
+  strong {
     margin-right: calc(8px * 1);
   }
 `;
@@ -71,10 +82,10 @@ function QuestionsHeader({ title, nickName }) {
       <QuestionInfo>
         <TimeLine>
           <span>Asked</span>
-          <span>today{/* 게시글 작성 시간 */}</span>
+          <strong>today{/* 게시글 작성 시간 */}</strong>
+          {/* (수정함) */}
+          <strong>{nickName}</strong>
         </TimeLine>
-        {/* (수정함) */}
-        <strong>{nickName}</strong>
       </QuestionInfo>
     </QuestionHeader>
   );
