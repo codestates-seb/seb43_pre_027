@@ -28,7 +28,7 @@ const Utils = styled.div`
   padding-top: 4px;
   .modified-date {
     font-size: 12px;
-    color: var(--blue-600);
+    color: hsl(206, 100%, 40%);
     padding-top: 7px;
   }
 `;
@@ -36,14 +36,14 @@ const Utils = styled.div`
 // 공유, 수정, 삭제 옵션들 스타일링
 const Options = styled.div`
   display: flex;
-  color: var(--black-500);
+  color: hsl(210, 8%, 45%);
   font-size: 13px;
   margin: -4px;
   button {
     height: 17px;
     margin-top: 2px;
     padding-top: 7px;
-    color: var(--black-500);
+    color: hsl(210, 8%, 45%);
     font-size: 13px;
     background-color: transparent;
     border: none;

@@ -21,7 +21,7 @@ const UtileMenuContainer = styled.div`
       margin: 0 10px;
       cursor: pointer;
       > svg {
-        fill: var(--black-600);
+        fill: hsl(210, 8%, 35%);
       }
     }
     li.profile {
@@ -38,7 +38,7 @@ const UtileMenuContainer = styled.div`
         width: 24px;
         height: 24px;
         border-radius: 3px;
-        background: var(--black-075);
+        background: hsl(210, 8%, 90%);
       }
       .reputation {
         font-size: 12px;
@@ -48,7 +48,7 @@ const UtileMenuContainer = styled.div`
       .triangle {
         width: 15px;
         height: 15px;
-        fill: var(--orange-500);
+        fill: hsl(27, 90%, 50%);
       }
     }
   }

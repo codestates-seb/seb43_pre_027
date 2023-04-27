@@ -34,16 +34,23 @@ const UserInfoContainer = styled.section`
   }
 `;
 
-export const UserInfo = () => {
+export const UserInfo = ({ type, createdAt, author }) => {
   return (
-    <UserInfoContainer>
+    <UserInfoContainer
+      bgColor={type === 'question' ? 'rgb(217, 234, 247)' : 'transparent'}
+    >
       <div className="asked-time">
-        <span>{getTimeElapsed()}</span>
+        <span>
+          {type === 'question' ? 'asked ' : 'answered '}
+          {getTimeElapsed(createdAt)}
+        </span>
       </div>
       <div className="avatar-wrapper">
         <AiOutlineUser size="32px" />
       </div>
-      <div className="user-detail"></div>
+      <div className="user-detail">
+        <a href="?">{author.NickName}</a>
+      </div>
     </UserInfoContainer>
   );
 };
