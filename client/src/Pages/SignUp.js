@@ -97,11 +97,14 @@ function SignUp() {
     if (displayName === '' || email === '' || password === '') return;
 
     return axios
-      .post('http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/members', {
-        nickName: displayName,
-        email,
-        password,
-      })
+      .post(
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/members',
+        {
+          nickName: displayName,
+          email,
+          password,
+        }
+      )
       .then(() => {
         // 성공하면 로그인 페이지로 이동
         navigate('/');

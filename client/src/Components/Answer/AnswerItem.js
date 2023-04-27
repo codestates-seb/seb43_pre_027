@@ -134,7 +134,7 @@ const AnswerDelete = styled.div`
   }
 `;
 
-function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
+function AnswerItem({ id, answerItem, addAnswer, setAddAnswer }) {
   const [answerScore, setAnswerScore] = useState(0);
 
   const handleUpVote = () => {
@@ -166,16 +166,20 @@ function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
 
   const onClickEditButton = () => {
     setEdited(true);
+
+    let token = localStorage.getItem('access_token');
+
     axios
       .patch(
         // comments뒤에는 member-id/댓글id
-        '/comments/1/2',
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/comments/' +
+          id,
         {
           body: newAnswer,
         },
         {
           headers: {
-            'ngrok-skip-browser-warning': '69420',
+            Authorization: token,
           },
         }
       )
@@ -197,13 +201,17 @@ function AnswerItem({ answerItem, addAnswer, setAddAnswer }) {
       }));
       setAddAnswer(nextAnswerList);
     }
+
+    let token = localStorage.getItem('access_token');
+
     axios
       .delete(
         // comments뒤에는 member-id/댓글id
-        '/comments/1/1',
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/comments/' +
+          id,
         {
           headers: {
-            'ngrok-skip-browser-warning': '69420',
+            Authorization: token,
           },
         }
       )

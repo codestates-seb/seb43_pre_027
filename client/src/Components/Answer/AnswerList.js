@@ -38,9 +38,11 @@ const AnswerList = ({ addAnswer, setAddAnswer, commentBodys }) => {
           {commentBodys && // answerList가 있을때만 출력
             commentBodys.map((answerItem) => {
               if (answerItem.deleted) return null;
+              console.log('answerItem: ', answerItem);
               return (
                 <AnswerItem
-                  key={answerItem.id}
+                  key={answerItem.commentId}
+                  id={answerItem.commentId}
                   answerItem={answerItem.commentBody}
                   addAnswer={addAnswer}
                   setAddAnswer={setAddAnswer}

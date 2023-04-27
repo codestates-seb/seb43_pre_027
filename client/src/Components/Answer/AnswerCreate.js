@@ -71,7 +71,8 @@ function AnswerCreate({ addAnswer, setAddAnswer }) {
       .post(
         // 멤버 아이디가 1대신 들어감
         // 뒤에꺼는 질문게시물 id
-        '/comments/' + id,
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/comments/' +
+          id,
         { body: answer },
         {
           headers: {
@@ -80,7 +81,7 @@ function AnswerCreate({ addAnswer, setAddAnswer }) {
         }
       )
       .then((결과) => {
-        console.log(결과.data.data);
+        console.log(결과);
       })
       .catch(() => {
         console.log('실패함');

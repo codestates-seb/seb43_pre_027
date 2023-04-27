@@ -174,7 +174,7 @@ function AskQuestion() {
         onClick={() => {
           axios
             .post(
-              '/questions',
+              'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/questions',
               {
                 title: 타이틀내용,
                 body: 바디내용,

@@ -202,7 +202,8 @@ function QuestionEdite() {
             onClick={() => {
               axios
                 .patch(
-                  '/questions/' + id,
+                  'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/questions/' +
+                    id,
                   {
                     title: 타이틀내용,
                     body: 바디내용,

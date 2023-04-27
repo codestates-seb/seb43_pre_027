@@ -92,11 +92,15 @@ function QuestionsDetail() {
   let navigator = useNavigate();
   useEffect(() => {
     axios
-      .get('/questions/' + id, {
-        headers: {
-          'ngrok-skip-browser-warning': '69420',
-        },
-      })
+      .get(
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/questions/' +
+          id,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
       .then((결과) => {
         console.log(결과.data);
         setQuestionData(결과.data);

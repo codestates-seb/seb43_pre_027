@@ -119,10 +119,13 @@ function Login() {
 
     // 로그인 처리
     axios
-      .post('http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/auth/login', {
-        username: email,
-        password,
-      })
+      .post(
+        'http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/auth/login',
+        {
+          username: email,
+          password,
+        }
+      )
       .then((res) => {
         localStorage.setItem('access_token', res.headers.authorization);
         localStorage.setItem('refresh_token', res.headers.refresh);
