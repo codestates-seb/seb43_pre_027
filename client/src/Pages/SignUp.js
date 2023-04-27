@@ -31,19 +31,6 @@ const SignUpForm = styled.div`
     background-color: #ffffff;
     box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
       0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
-
-    button {
-      padding: 10px;
-      border: none;
-      border-radius: 3px;
-      color: #ffffff;
-      background-color: #0a95ff;
-      cursor: pointer;
-
-      :hover {
-        background-color: #0b74c5;
-      }
-    }
   }
 
   .login {
@@ -61,10 +48,39 @@ const SignUpForm = styled.div`
   }
 `;
 
+const ButtonGroup = styled.div`
+  button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    margin-bottom: 9px;
+    color: #ffffff;
+    background-color: #0a95ff;
+    cursor: pointer;
+
+    :hover {
+      background-color: #0b74c5;
+    }
+  }
+
+  p {
+    display: none;
+    color: #de4f54;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  p.signup-failed {
+    display: block;
+  }
+`;
+
 function SignUp() {
   const [displayNameAlert, setDisplayNameAlert] = useState('');
   const [emailAlert, setEmailAlert] = useState('');
   const [passwordAlert, setPasswordAlert] = useState('');
+  const [signupFailed, setSignupFailed] = useState('');
 
   const navigate = useNavigate();
 
@@ -93,7 +109,7 @@ function SignUp() {
       })
       .catch((err) => {
         // 실패하면 에러 메시지 출력
-        console.log(err);
+        setSignupFailed('signup-failed');
       });
   };
 
@@ -120,7 +136,10 @@ function SignUp() {
             id="password"
             alertMessage={passwordAlert}
           />
-          <button type="submit">Sign up</button>
+          <ButtonGroup>
+            <button type="submit">Sign up</button>
+            <p className={signupFailed}>Sign up failed</p>
+          </ButtonGroup>
         </form>
         <p className="login">
           Already have an account? <Link to="/">Log in</Link>
