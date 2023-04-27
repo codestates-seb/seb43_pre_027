@@ -47,7 +47,7 @@ public interface QuestionMapper {
             boolean isAdopted = false;
             for (int i = 0; i < question.getComments().size(); i++) {
                 if (question.getComments().get(i).isAdopt() && !question.getComments().get(i).getCommentStatus().equals(Comment.CommentStatus.COMMENT_DELETED)) {
-                    CommentBody cb = new CommentBody(question.getComments().get(i).getBody(),
+                    CommentBody cb = new CommentBody(question.getComments().get(i).getCommentId(),question.getComments().get(i).getBody(),
                             question.getComments().get(i).getMember().getNickName());
                     commentBodies.add(cb);
                     isAdopted = true;
@@ -62,7 +62,7 @@ public interface QuestionMapper {
             for(int i = a; i < question.getComments().size(); i++) {
                 if(!question.getComments().get(i).getCommentStatus().equals(Comment.CommentStatus.COMMENT_DELETED))
                 {
-                    CommentBody cb = new CommentBody(question.getComments().get(i).getBody(),
+                    CommentBody cb = new CommentBody(question.getComments().get(i).getCommentId(),question.getComments().get(i).getBody(),
                             question.getComments().get(i).getMember().getNickName());
                     commentBodies.add(cb);
                 }

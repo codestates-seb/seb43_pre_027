@@ -71,7 +71,7 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOrigin("http://ec2-43-201-109-241.ap-northeast-2.compute.amazonaws.com/");
+        configuration.addAllowedOrigin("http://ec2-13-125-207-209.ap-northeast-2.compute.amazonaws.com/");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("http://seb43-pre27-bucket.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOriginPattern("*");
