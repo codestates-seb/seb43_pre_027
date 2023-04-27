@@ -1,10 +1,7 @@
 import styled from 'styled-components';
-import { reset } from 'styled-reset';
 import React from 'react';
-import GlobalStyles from '../Theme/GlobalStyles';
 import { Link, useNavigate } from 'react-router-dom';
 import Search from './Search';
-import { useSelector } from 'react-redux';
 import sprites from '../Assets/icon/Sprites.svg';
 import UtilMenu from './UtilMenu';
 

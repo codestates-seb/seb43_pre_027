@@ -1,7 +1,6 @@
-import styled, { useTheme } from 'styled-components';
-import { Link, Route } from 'react-router-dom';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { ReactComponent as Footerlogo } from '../Assets/icon/Footerlogo.svg';
-import { useState } from 'react';
 
 const FooterContainer = styled.footer`
   width: 100%;
