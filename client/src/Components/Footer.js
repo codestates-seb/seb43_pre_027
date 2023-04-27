@@ -14,7 +14,6 @@ const FooterContainer = styled.footer`
     width: 100%;
     max-width: 1350px;
     margin: 0 auto;
-
     .logobox {
       flex: 0 0 300px;
     }
