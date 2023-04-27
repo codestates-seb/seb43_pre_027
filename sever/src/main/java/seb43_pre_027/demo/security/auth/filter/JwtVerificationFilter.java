@@ -16,15 +16,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 //Jwt를 검증하는 전용 Security Filter
 @Slf4j
-public class JwtVerificationFilter extends OncePerRequestFilter {// OncePerRequestFilter를 확장해서 request당 한번만 실행되는 Security Filter를 구현가능
-    private final JwtTokenizer jwtTokenizer; //JWT를 검증하고 Claims (우리는 username(email)이랑 Roles를 Claims에 Map으로 저장중)를 얻는 데 사용됨
-    private final CustomAuthorityUtils authorityUtils; //검증 성공시 Authentication 객체에 채울 사용자의 권한을 생성하는데 사용함
+public class JwtVerificationFilter extends OncePerRequestFilter {
+    private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils;
 
     public JwtVerificationFilter(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;

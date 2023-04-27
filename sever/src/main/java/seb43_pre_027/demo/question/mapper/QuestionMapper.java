@@ -8,13 +8,14 @@ import seb43_pre_027.demo.question.dto.QuestionDto;
 import seb43_pre_027.demo.question.entity.Question;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QuestionMapper {
     Question questionPostDtoToQuestion(QuestionDto.Post questionPostDto);
+
     Question questionPatchDtoToQuestion(QuestionDto.Patch questionPatchDto);
+
     default QuestionDto.Response questionToQuestionResponseDto(Question question){
         if (question == null) {
             return null;
@@ -30,7 +31,8 @@ public interface QuestionMapper {
             response.memberNickName(question.getMember().getNickName());
             return response.build();
         }
-    };
+    }
+
     default QuestionDto.QuestionWithCommentResponseDto questionToQuestionWithCommentResponseDto(Question question) {
         if (question == null) {
             return null;
@@ -69,5 +71,6 @@ public interface QuestionMapper {
             return questionWithCommentResponseDto;
         }
     }
+
     List<QuestionDto.Response> questionsToQuestionResponseDtos(List<Question> questions);
 }

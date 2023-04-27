@@ -16,21 +16,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Member extends Auditable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
     @Column
-    private String nickName; // OAuth2 구현으로 인한 nullable 제거
+    private String nickName;
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
     @Column
-    private String password; // OAuth2 구현으로 인한 nullable 제거
+    private String password;
 
     @Column
-    private String location = ""; // OAuth2 구현으로 인한 nullable 제거
+    private String location = "";
 
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();

@@ -26,6 +26,7 @@ public interface MemberMapper {
         }
         return myQuestionResponseDtos;
     }
+
     default List<MemberDto.MyCommentResponseDto> memberToMyCommentResponseDtos(Member member) {
         List<MemberDto.MyCommentResponseDto> myCommentResponseDtos = new ArrayList<>();
         for (int i = 0; i < member.getComments().size(); i++) {

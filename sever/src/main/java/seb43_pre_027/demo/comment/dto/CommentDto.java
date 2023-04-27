@@ -13,8 +13,6 @@ public class CommentDto {
     @Getter
     @Setter
     public static class Post {
-
         private String body;
-
     }
 }

@@ -29,7 +29,7 @@ public class MemberService {
         this.authorityUtils = authorityUtils;
     }
 
-    public Member createMember(Member member){
+    public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
@@ -43,7 +43,7 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member){
+    public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
         Optional.ofNullable(member.getNickName())
                 .ifPresent(nickName -> findMember.setNickName(nickName));
@@ -67,11 +67,13 @@ public class MemberService {
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
+
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
+
     public Member findVerifiedEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         Member findMember = member.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));

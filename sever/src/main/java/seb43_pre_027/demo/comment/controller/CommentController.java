@@ -69,7 +69,6 @@ public class CommentController {
         return ResponseEntity.created(location).build();
     }
 
-
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(
             @PathVariable("comment-id") @Positive long commentId,

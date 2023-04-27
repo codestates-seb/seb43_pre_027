@@ -15,6 +15,7 @@ public class QuestionDto {
     @Getter
     @AllArgsConstructor
     public static class Post {
+
         @NotBlank(message = "제목은 공백이 아니어야 합니다.")
         private String title;
 
@@ -31,7 +32,7 @@ public class QuestionDto {
     @Getter
     @AllArgsConstructor
     public static class Patch {
-        private long questionId; //특정게시물
+        private long questionId;
 
         @NotBlank(message = "제목은 공백이 아니어야 합니다.")
         private String title;
@@ -47,15 +48,12 @@ public class QuestionDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class Response { //ㅇ/ㅐ가 포스트맨에 보여지는 값
+    public static class Response {
         private long questionId;
         private String title;
         private String body;
-        private String memberNickName; //작성자아이디
+        private String memberNickName;
         private Question.QuestionStatus questionStatus;
-
-        //작성자 닉네임
-
     }
 
     @Getter

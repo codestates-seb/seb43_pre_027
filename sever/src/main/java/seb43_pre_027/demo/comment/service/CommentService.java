@@ -11,7 +11,6 @@ import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.question.entity.Question;
 import seb43_pre_027.demo.question.service.QuestionService;
 
-import javax.swing.plaf.PanelUI;
 import java.util.Optional;
 
 @Service
@@ -20,8 +19,6 @@ public class CommentService {
     private final CommentRepository commentRepository; //서비스에서 레퍼지토리에 있는 메서들을 이용
     private final MemberService memberService;
     private final QuestionService questionService;
-
-
 
     public Comment createComment(Comment comment){
         return commentRepository.save(comment);
@@ -38,7 +35,6 @@ public class CommentService {
         return commentRepository.save(findComment);
     }
 
-
     public void deleteComment(long commentId, long memberId) {
         Comment findComment = findVerifiedComment(commentId);
         Long currentCommentMemberId = findComment.getMember().getMemberId();
@@ -46,6 +42,7 @@ public class CommentService {
         findComment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
         commentRepository.save(findComment);
     }
+
     public void adoptComment(long memberId, long commentId) {
         Comment findComment = findVerifiedComment(commentId);
         Long currentCommentMemberId = findComment.getMember().getMemberId();
@@ -66,7 +63,6 @@ public class CommentService {
     private static void checkMatchCommentMemberIdAndInjectedMemberId(long memberId, Long currentCommentMemberId) {
         if(currentCommentMemberId != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
     }
-
 
     public void createMock(){
         Question verifiedQuestion = questionService.findVerifiedQuestion(1);

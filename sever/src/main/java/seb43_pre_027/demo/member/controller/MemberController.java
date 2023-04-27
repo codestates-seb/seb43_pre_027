@@ -2,7 +2,6 @@ package seb43_pre_027.demo.member.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,20 +9,16 @@ import seb43_pre_027.demo.member.dto.MemberDto;
 import seb43_pre_027.demo.member.mapper.MemberMapper;
 import seb43_pre_027.demo.member.service.MemberService;
 import seb43_pre_027.demo.member.entity.Member;
-
 import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
 import seb43_pre_027.demo.utils.UriCreator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import static seb43_pre_027.demo.question.controller.QuestionController.QUESTION_DEFAULT_URL;
-//memberid pathvariable로 들어가는 부분 jwt에서 claims에 memberid저장된거 꺼내서 memberid로 사용
 @RestController
 @RequestMapping("/members")
 @Slf4j
@@ -32,7 +27,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
     private final JwtTokenizer jwtTokenizer;
-
 
     public MemberController(MemberService memberService,
                             MemberMapper memberMapper,
@@ -57,7 +51,6 @@ public class MemberController {
         URI location = UriCreator.createUri("/members", createdMember.getMemberId());
         return ResponseEntity.created(location).build();
     }
-
 
     @PatchMapping
     public ResponseEntity updateMember(HttpServletRequest request,
@@ -87,8 +80,6 @@ public class MemberController {
         return new ResponseEntity(myQuestionResponseDtos, HttpStatus.OK);
     }
 
-
-    //구현해야함
     @GetMapping("my-comment")
     public ResponseEntity getMyComment(HttpServletRequest request) {
         Long memberId = getMemberId(request);

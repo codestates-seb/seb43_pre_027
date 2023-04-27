@@ -17,9 +17,7 @@ public class MemberDto {
     @Setter
     public static class Post {
         private String nickName;
-
         private String email;
-
         private String password;
     }
 
@@ -39,7 +37,5 @@ public class MemberDto {
         private String questionTitle;
         private Long commentId;
         private String commentBody;
-
-
     }
 }

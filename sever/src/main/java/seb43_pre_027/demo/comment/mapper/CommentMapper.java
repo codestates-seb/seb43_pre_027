@@ -8,8 +8,6 @@ import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.question.entity.Question;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
-
-
   default Comment commentPostDtoToComment(CommentDto.Post commentPostDto, Member member, Question question){
     if (commentPostDto == null) {
       return null;
@@ -21,7 +19,6 @@ public interface CommentMapper {
       comment.setBody(commentPostDto.getBody());
       return comment;
     }
-
   }
   Comment commentPatchDtoToComment(CommentDto.Patch commentPatchDto);
 }

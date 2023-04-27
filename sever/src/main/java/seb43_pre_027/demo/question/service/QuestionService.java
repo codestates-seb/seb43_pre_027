@@ -1,7 +1,5 @@
 package seb43_pre_027.demo.question.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import seb43_pre_027.demo.exception.BusinessLogicException;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service  //저장해야하고, 저장, 삭제 수정 이런 메서드들을 모아놓은 클래스
+@Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
@@ -44,18 +42,16 @@ public class QuestionService {
         return questionRepository.save(findQuestion);
     }
 
-    private static void checkMatchQuestionMemberIdAndInjectedMemberId(long memberId, long currentQuestionMemberId) {
-        if(currentQuestionMemberId != memberId)  throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
-    }
-
     public Question findQuestion(long questionId) {
         return findVerifiedQuestion(questionId);
     }
 
-    public Page<Question> findQuestions(int page, int size) {
-        return questionRepository.findAll(PageRequest.of(page, size,
-                Sort.by("questionId").descending()));
-    }
+    // 페이지네이션 적용 안함으로 주석처리
+//    public Page<Question> findQuestions(int page, int size) {
+//        return questionRepository.findAll(PageRequest.of(page, size,
+//                Sort.by("questionId").descending()));
+//    }
+
     public List<Question> findQuestionList() {
         List<Question> all = questionRepository.findAll(Sort.by(Sort.Order.desc("questionId")));
         List<Question> questions = all
@@ -85,6 +81,11 @@ public class QuestionService {
         return findQuestion;
     }
 
+    private static void checkMatchQuestionMemberIdAndInjectedMemberId(long memberId, long currentQuestionMemberId) {
+        if(currentQuestionMemberId != memberId) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_MATCH);
+        }
+    }
 
     public  void testMockCreate(){
         Member verifiedMember = memberService.findVerifiedMember(1);
@@ -98,5 +99,4 @@ public class QuestionService {
             questionRepository.save(question);
         }
     }
-
 }

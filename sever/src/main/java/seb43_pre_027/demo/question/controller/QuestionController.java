@@ -1,19 +1,11 @@
 package seb43_pre_027.demo.question.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import seb43_pre_027.demo.comment.dto.CommentDto;
-import seb43_pre_027.demo.comment.entity.Comment;
-import seb43_pre_027.demo.comment.mapper.CommentMapper;
-import seb43_pre_027.demo.comment.service.CommentService;
-import seb43_pre_027.demo.dto.MultiResponseDto;
 import seb43_pre_027.demo.dto.MultiResponseDto2;
-import seb43_pre_027.demo.dto.PageInfo;
 import seb43_pre_027.demo.dto.TotalCount;
 import seb43_pre_027.demo.member.entity.Member;
 import seb43_pre_027.demo.member.service.MemberService;
@@ -28,10 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questions")
@@ -52,10 +42,11 @@ public class QuestionController {
     }
 
     @GetMapping("/create")
-    public ResponseEntity createQuestion(){
+    public ResponseEntity createQuestion() {
         questionService.testMockCreate();
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(
             @PathVariable("question-id") @Positive long questionId) {
@@ -87,7 +78,7 @@ public class QuestionController {
 
         return ResponseEntity.created(location).build();
     }
-////////////////////////변경한 부분
+
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestionOfMember(
             @PathVariable("question-id") @Positive long questionId,
@@ -101,7 +92,6 @@ public class QuestionController {
         return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question), HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(
             @PathVariable("question-id") @Positive long questionId,
@@ -112,7 +102,7 @@ public class QuestionController {
         String username = (String) claims.get("username");
         Member verifiedEmail = memberService.findVerifiedEmail(username);
         Long memberId = verifiedEmail.getMemberId();
-        questionService.deleteQuestion(questionId,memberId);
+        questionService.deleteQuestion(questionId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

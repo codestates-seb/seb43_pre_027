@@ -15,13 +15,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import seb43_pre_027.demo.security.auth.filter.JwtAuthenticationFilter;
-import seb43_pre_027.demo.security.auth.filter.JwtVerificationFilter;
 import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationFailureHandler;
 import seb43_pre_027.demo.security.auth.handler.MemberAuthenticationSuccessHandler;
 import seb43_pre_027.demo.security.auth.jwt.JwtTokenizer;
 import seb43_pre_027.demo.security.auth.utils.CustomAuthorityUtils;
-
-import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -30,7 +27,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
@@ -48,7 +44,7 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .apply(new CustomFilterConfigurer())//아래의 CustomConfigurer를 추가해서 커스터마이징된 Configuration을 추가할 수 있음
+                .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
@@ -89,22 +85,18 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    //구현한 Custom filter를 등록하는 역할을 함
+
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
-            //Spring Security의 설정을 구성하는 SecurityConfigurer 간에 공유되는 객체를 얻을 수 있음
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            //필터를 생성하면서 authenticationManager와 jwtTokenizer를 di해줌
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login"); //기본 디폴트 requestUrl은 "/login"으로설정되어 있고 해당 메서드를 통해
-            //해당 필터의 processing url을 지정할 수 있다.
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // 추가
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // 추가
+            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             builder.addFilter(jwtAuthenticationFilter);
-
         }
     }
 }

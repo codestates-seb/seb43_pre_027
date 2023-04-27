@@ -18,8 +18,8 @@ import java.io.IOException;
 public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        Exception exception = (Exception) request.getAttribute("exception"); //JwtVerificationFilter의 doFilterInternal의 try catch문으로
-        //인해 HttpServletRequest에 생긴 attribute를 가져와서 Exception 객체로 만들어줌
+        Exception exception = (Exception) request.getAttribute("exception");
+
         ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
 
         logExceptionMessage(authException, exception);
